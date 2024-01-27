@@ -2,30 +2,30 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import TokenService from './services/TokenService';
+import PollService from './services/PollService';
 
 function App() {
   const [token, setToken] = useState([]);
 
   const responseMessage = (response) => {
+    TokenService.saveToken(response.credential);
     setToken(response.credential);
     console.log(response);
   };
-  const errorMessage = (error) => {
-    console.log(error);
+  const errorMessage = () => {
+    console.log("Failed to login");
   };
 
   useEffect(
     () => {
-      axios
-        .get("https://voting-app-backend-dev.onrender.com/polls", {
-            headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    })
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((err) => console.log(err));
+      PollService.getPolls()
+      .then((res) => {
+        console.log(res);
+      })
+      .catch(() => {
+        console.log("Failed to get poll");
+      });
     },
     [token]
   );
