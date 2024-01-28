@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { GoogleLogin, googleLogout, useGoogleLogin } from '@react-oauth/google';
-import axios from 'axios';
+import { GoogleLogin } from '@react-oauth/google';
 import TokenService from './services/TokenService';
 import PollService from './services/PollService';
 
@@ -19,7 +18,9 @@ function App() {
 
   useEffect(
     () => {
-      PollService.getPolls()
+      PollService.vote("65a211bc7ef89907c966a3c8","65a211bc7ef89907c966a3c7")
+      // PollService.getPolls()
+      // PollService.updatePollItem("65a211bc7ef89907c966a3c8", "65a211bc7ef89907c966a3c7", "new text")
       .then((res) => {
         console.log(res);
       })
