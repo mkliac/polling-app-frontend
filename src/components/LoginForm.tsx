@@ -9,11 +9,11 @@ const LoginForm = () => {
     const [user, setUser] = useState<User>();
     const getUser = () => {
         UserService.saveUser()
-        .then(data => {setUser(data); console.log(data);})
+        .then(data => setUser(data))
         .catch(() => setUser(null));
     };
 
-    const errorMessage = () => {
+    const onError = () => {
         console.log("Failed to login");
       };
 
@@ -29,9 +29,10 @@ const LoginForm = () => {
     return (
         <div>
             {user == undefined ? 
-            <GoogleLogin 
-            onSuccess={onSuccess} 
-            onError={errorMessage} /> :
+                <GoogleLogin 
+                    onSuccess={onSuccess} 
+                    onError={onError} 
+                /> :
                 <Typography>{user.username}</Typography>
             }
         </div>
