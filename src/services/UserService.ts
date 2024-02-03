@@ -6,3 +6,5 @@ class UserService {
         return postApi(USER_URI);
     }
 }
+
+export default new UserService();
