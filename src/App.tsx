@@ -3,6 +3,8 @@ import './App.css';
 import PollService from './services/PollService';
 import LoginForm from './components/LoginForm';
 import PollSubmitForm from './components/PollSubmitForm';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PollForm from './components/PollForm';
 
 function App() {
   // useEffect(
@@ -21,10 +23,15 @@ function App() {
   // );
 
   return (
-    <div className='App'>
-      <LoginForm></LoginForm>
-      <PollSubmitForm></PollSubmitForm>
-    </div>
+    <BrowserRouter>
+        <div className='App'>
+          <Routes>
+            <Route path="/" element={<LoginForm />}/>
+            <Route path="/create-poll" element={<PollSubmitForm />}/>
+            <Route path="/polls/:id" element={<PollForm />}/>
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 

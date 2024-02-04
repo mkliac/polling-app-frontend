@@ -1,10 +1,11 @@
 import { Add, Delete } from "@material-ui/icons";
-import { Button, Card, CardContent, Grid, IconButton, Switch, TextField } from "@mui/material"
+import { Button, Card, CardContent, FormControlLabel, Grid, IconButton, Switch, TextField } from "@mui/material"
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
+import { useNavigate } from "react-router-dom";
 
 const PollSubmitForm = () => {
     const [items, setItems] = useState([]);
@@ -15,6 +16,7 @@ const PollSubmitForm = () => {
         isPrivate: false,
         isAnonymous: false,
         closedDate: undefined});
+    const navigate = useNavigate();
     
     const removeItem = (index) => {
         setItems(items.filter((_, i) => i !== index));
@@ -32,12 +34,17 @@ const PollSubmitForm = () => {
 
     const submitRequest = (request:SavePollRequest) => {
         request.items = items;
-        PollService.savePoll(request).then((res) => console.log(res));
+        PollService.savePoll(request)
+        .then((res) => {
+            console.log(res);
+            navigate(`/polls/${res.id}`)
+        })
+        .catch((e) => console.log(e));
     }
 
     return (
         <div>
-            <Card style={{maxWidth: 450, padding: "20px 5px", margin: "0 auto"}}>
+            <Card style={{maxWidth: 550, padding: "20px 5px", margin: "0 auto"}}>
                 <CardContent>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
@@ -49,13 +56,13 @@ const PollSubmitForm = () => {
                                         onChange={(e) => {request.description=e.target.value}}/>
                         </Grid>
                         {items.map((item, idx) => 
-                            <Grid container spacing={1} item key={idx}>
-                                <Grid item xs key={idx}>
+                            <Grid item container spacing={1} key={idx}>
+                                <Grid item xs>
                                     <TextField value={item} fullWidth onChange={(e) => {changeItem(e.target.value, idx)}} />
                                 </Grid>
-                                <Grid item style={{width: 48}}>
-                                    <IconButton key={idx} onClick={() => {removeItem(idx)}}>
-                                        <Delete />
+                                <Grid item width={56}>
+                                    <IconButton onClick={() => {removeItem(idx)}}>
+                                        <Delete fontSize="inherit"/>
                                     </IconButton>
                                 </Grid>
                             </Grid>
@@ -65,12 +72,25 @@ const PollSubmitForm = () => {
                                 <Add />
                             </IconButton>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Switch onChange={(e) => {request.isPrivate=e.target.checked}}/>
-                            <Switch onChange={(e) => {request.isAnonymous=e.target.checked}}/>
+                        <Grid item xs>
+                            <FormControlLabel
+                                control={
+                                    <Switch onChange={(e) => {request.isPrivate=e.target.checked}}/>
+                                }
+                                label="Private"
+                            />
+                        </Grid>
+                        <Grid item xs>
+                            <FormControlLabel
+                                    control={
+                                        <Switch onChange={(e) => {request.isAnonymous=e.target.checked}}/>
+                                    }
+                                    label="Anonymous"
+                            />
+                        </Grid>
+                        <Grid item xs={5}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                {/* TODO: add date to request */}
-                                {/* <DatePicker onChange={(e) => {setRequest({...request, closedDate: e.value})}}/> */}
+                                <DatePicker onChange={(e) => {request.closedDate=new Date(e.toLocaleString())}}/>
                             </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12}>
