@@ -7,31 +7,31 @@ import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
 
 const PollSubmitForm = () => {
-    const [request, setRequest] = useState<SavePollRequest>(
+    const [items, setItems] = useState([]);
+    const [request] = useState<SavePollRequest>(
         {title: '', 
         description: '', 
         items: [], 
         isPrivate: false,
         isAnonymous: false,
         closedDate: undefined});
-
-    // const [pollItems, setPollItems] = useState<string[]>([]);
     
     const removeItem = (index) => {
-        setRequest({
-            ...request,
-            items: request.items.filter((_, i) => i !== index)
-        });
+        setItems(items.filter((_, i) => i !== index));
     }
 
     const addItem = (newItem) => {
-        setRequest({
-            ...request,
-            items: [...request.items, newItem]
-        });
+        setItems([...items, newItem]);
+    }
+
+    const changeItem = (newVal, index) => {
+        let newItems = [...items];
+        newItems[index] = newVal;
+        setItems(newItems);
     }
 
     const submitRequest = (request:SavePollRequest) => {
+        request.items = items;
         PollService.savePoll(request).then((res) => console.log(res));
     }
 
@@ -48,13 +48,18 @@ const PollSubmitForm = () => {
                             <TextField fullWidth multiline rows={4} label="Description" placeholder="(Optional)" 
                                         onChange={(e) => {request.description=e.target.value}}/>
                         </Grid>
-                        {request.items.map((_item, idx) => 
-                            <Grid item xs={12} key={idx}>
-                                <TextField fullWidth onChange={(e) => {request.items[idx]=e.target.value}} />
-                                <IconButton key={idx} onClick={() => {removeItem(idx)}}>
-                                    <Delete />
-                                </IconButton>
-                            </Grid>)}
+                        {items.map((item, idx) => 
+                            <Grid container spacing={1} item key={idx}>
+                                <Grid item xs key={idx}>
+                                    <TextField value={item} fullWidth onChange={(e) => {changeItem(e.target.value, idx)}} />
+                                </Grid>
+                                <Grid item style={{width: 48}}>
+                                    <IconButton key={idx} onClick={() => {removeItem(idx)}}>
+                                        <Delete />
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                        )}
                         <Grid item xs={12}>
                             <IconButton onClick={() => {addItem('')}}>
                                 <Add />
