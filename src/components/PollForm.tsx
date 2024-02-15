@@ -7,6 +7,7 @@ import { Typography } from "@mui/material";
 const PollForm = () => {
     const {id} = useParams(); 
     const [poll, setPoll] = useState<Poll>();
+    
     useEffect(() => {
         PollService.getPoll(id)
         .then(data => {setPoll(data)})

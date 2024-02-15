@@ -1,11 +1,11 @@
-import { Add, Delete } from "@material-ui/icons";
 import { Button, Card, CardContent, FormControlLabel, Grid, IconButton, Switch, TextField } from "@mui/material"
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { useState } from "react";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
 import { useNavigate } from "react-router-dom";
+import { Add, DateRange, Delete } from "@mui/icons-material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const PollSubmitForm = () => {
     const [items, setItems] = useState([]);
@@ -43,8 +43,8 @@ const PollSubmitForm = () => {
     }
 
     return (
-        <div>
-            <Card style={{maxWidth: 550, padding: "20px 5px", margin: "0 auto"}}>
+        <div style={{minHeight:"100vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
+            <Card style={{maxWidth: 550, maxHeight: 800, padding: "20px 5px", margin: "0 auto"}}>
                 <CardContent>
                     <Grid container spacing={1}>
                         <Grid item xs={12}>
@@ -94,7 +94,7 @@ const PollSubmitForm = () => {
                             </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="contained" onClick={() => submitRequest(request)}>Submit</Button>
+                            <Button variant="contained" onClick={() => submitRequest(request)}>Create</Button>
                         </Grid>
                     </Grid>
                 </CardContent>
