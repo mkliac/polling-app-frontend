@@ -36,7 +36,6 @@ const PollSubmitForm = () => {
         request.items = items;
         PollService.savePoll(request)
         .then((res) => {
-            console.log(res);
             navigate(`/polls/${res.id}`)
         })
         .catch((e) => console.log(e));

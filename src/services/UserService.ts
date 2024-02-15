@@ -2,7 +2,7 @@ import { postApi } from "../utils/api";
 
 const USER_URI = "/users";
 class UserService {
-    saveUser() {
+    login() {
         return postApi(USER_URI);
     }
 }

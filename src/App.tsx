@@ -3,18 +3,26 @@ import PollSubmitForm from './components/PollSubmitForm';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PollForm from './components/PollForm';
 import './App.css';
+import { createContext, useState } from 'react';
+import ProtectedRoute from './utils/ProtectiveRoutes';
 
-function App() {
+export const AuthContext = createContext(null);
+
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
-    <BrowserRouter>
+    <AuthContext.Provider value={{isLoggedIn, setIsLoggedIn}}>
+      <BrowserRouter>
         <div className='App'>
           <Routes>
-            <Route path="/" element={<LoginForm />}/>
-            <Route path="/create-poll" element={<PollSubmitForm />}/>
-            <Route path="/polls/:id" element={<PollForm />}/>
-        </Routes>
-      </div>
-    </BrowserRouter>
+            <Route path="/login" element={<LoginForm />}/>
+            <Route path="/create-poll" element={<ProtectedRoute><PollSubmitForm /></ProtectedRoute>}/>
+            <Route path="/polls/:id" element={<ProtectedRoute><PollForm /></ProtectedRoute>}/>
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </AuthContext.Provider>
   )
 }
 
