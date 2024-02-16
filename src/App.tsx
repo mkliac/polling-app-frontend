@@ -1,7 +1,7 @@
-import LoginForm from './components/LoginForm';
-import PollSubmitForm from './components/PollSubmitForm';
+import LoginForm from './components/LoginPage';
+import PollSubmitForm from './components/PollSubmitPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import PollForm from './components/PollForm';
+import PollForm from './components/PollPage';
 import './App.css';
 import { createContext, useState } from 'react';
 import ProtectedRoute from './utils/ProtectiveRoutes';

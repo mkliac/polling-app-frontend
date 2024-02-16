@@ -14,14 +14,18 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
     "dayjs": "^1.11.10",
+    "dotenv": "^16.4.4",
+    "env-cmd": "^10.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:local": "env-cmd -f .env.local react-scripts start",
+    "start:dev": "env-cmd -f .env.dev react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

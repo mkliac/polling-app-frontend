@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import TokenService from "../services/TokenService";
 
-const BACKEND_URL = "https://voting-app-backend-dev.onrender.com";
+const BACKEND_URL = process.env.REACT_APP_SERVER_BASE_URL;
 // const BACKEND_URL = "http://localhost:8080"
 const REQUEST_TIMEOUT = 600000;
 export const getApi = async (url: string, params?: object, data?: object) => {

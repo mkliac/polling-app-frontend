@@ -1,11 +1,11 @@
-import { Button, Card, CardContent, FormControlLabel, Grid, IconButton, Switch, TextField } from "@mui/material"
+import { Box, Button, Card, CardContent, FormControlLabel, Grid, IconButton, Modal, Switch, TextField } from "@mui/material"
 import { useState } from "react";
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
-import { useNavigate } from "react-router-dom";
-import { Add, DateRange, Delete } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import PollShareModal from "./PollShareModal";
 
 const PollSubmitForm = () => {
     const [items, setItems] = useState([]);
@@ -16,7 +16,8 @@ const PollSubmitForm = () => {
         isPrivate: false,
         isAnonymous: false,
         closedDate: undefined});
-    const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+    const [id, setId] = useState('');
     
     const removeItem = (index) => {
         setItems(items.filter((_, i) => i !== index));
@@ -36,13 +37,14 @@ const PollSubmitForm = () => {
         request.items = items;
         PollService.savePoll(request)
         .then((res) => {
-            navigate(`/polls/${res.id}`)
+            setOpen(true);
+            setId(res.id);
         })
         .catch((e) => console.log(e));
     }
 
     return (
-        <div style={{minHeight:"100vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
+        <Box style={{minHeight:"100vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
             <Card style={{maxWidth: 550, maxHeight: 800, padding: "20px 5px", margin: "0 auto"}}>
                 <CardContent>
                     <Grid container spacing={1}>
@@ -98,7 +100,14 @@ const PollSubmitForm = () => {
                     </Grid>
                 </CardContent>
             </Card>
-        </div>
+            <Modal
+                open={open}
+            >
+                <Box>
+                    <PollShareModal id={id} />
+                </Box>
+            </Modal>
+        </Box>
     )
 }
 
