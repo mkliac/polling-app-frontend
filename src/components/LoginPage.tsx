@@ -53,7 +53,7 @@ const LoginForm = () => {
                             onSuccess={onSuccess} 
                             onError={onError} 
                         /> :
-                        <Navigate to={localStorage.getItem("redirect") || "/create-poll"} />
+                        <Navigate to={sessionStorage.getItem("redirect") || "/create-poll"} />
                     }
                 </CardContent>
             </Card>

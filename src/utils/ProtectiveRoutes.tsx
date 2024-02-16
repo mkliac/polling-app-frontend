@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
   const prevLocation = useLocation();
 
   if (!isLoggedIn) {
-    localStorage.setItem("redirect", prevLocation.pathname);
+    sessionStorage.setItem("redirect", prevLocation.pathname);
     return <Navigate to="/login"/>;
   }
   return children;
