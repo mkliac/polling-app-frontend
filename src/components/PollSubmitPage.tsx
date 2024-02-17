@@ -44,8 +44,8 @@ const PollSubmitForm = () => {
     }
 
     return (
-        <Box style={{minHeight:"100vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
-            <Card style={{padding: "20px 5px", margin: "0 auto"}}>
+        <Box sx={{minHeight:"100vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
+            <Card sx={{padding: "20px 5px", margin: "0 auto"}}>
                 <Typography variant="h3">
                     Create Poll
                 </Typography>
