@@ -12,6 +12,7 @@ const PollShareModal = ({id}) => {
         navigator.clipboard.writeText(url);
         setCopied(true);
     }
+    
     return (
         <Box sx={{display:"flex", justifyContent:"center", alignItems:"center", height:"100vh"}}>
             <Card>

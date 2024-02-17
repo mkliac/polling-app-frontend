@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardContent, FormControlLabel, Grid, IconButton, Modal, Switch, TextField } from "@mui/material"
+import { Box, Button, Card, CardContent, Divider, FormControlLabel, IconButton, List, ListItem, Modal, Switch, TextField, Typography } from "@mui/material"
 import { useState } from "react";
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
@@ -45,59 +45,90 @@ const PollSubmitForm = () => {
 
     return (
         <Box style={{minHeight:"100vh", alignItems:"center", justifyContent:"center", display:"flex"}}>
-            <Card style={{maxWidth: 550, maxHeight: 800, padding: "20px 5px", margin: "0 auto"}}>
-                <CardContent>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12}>
-                            <TextField fullWidth label="Title" required placeholder="Title must not be empty" 
-                                        onChange={(e) => {request.title=e.target.value}}/>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField fullWidth multiline rows={4} label="Description" placeholder="(Optional)" 
-                                        onChange={(e) => {request.description=e.target.value}}/>
-                        </Grid>
-                        {items.map((item, idx) => 
-                            <Grid item container spacing={1} key={idx}>
-                                <Grid item xs>
-                                    <TextField value={item} fullWidth onChange={(e) => {changeItem(e.target.value, idx)}} />
-                                </Grid>
-                                <Grid item width={56}>
-                                    <IconButton onClick={() => {removeItem(idx)}}>
+            <Card style={{padding: "20px 5px", margin: "0 auto"}}>
+                <Typography variant="h3">
+                    Create Poll
+                </Typography>
+                <CardContent sx={{maxWidth:"550px", maxHeight:"80vh", overflow:"auto", scrollbarGutter:"stable"}}>
+                    <Typography variant="h6" textAlign="left">
+                        Title*
+                    </Typography>
+                    <TextField 
+                        fullWidth 
+                        required 
+                        placeholder="Title must not be empty" 
+                        onChange={(e) => {request.title=e.target.value}}
+                    />
+                    <Typography variant="h6" textAlign="left">
+                        Description                        
+                    </Typography>
+                    <TextField 
+                        fullWidth 
+                        multiline 
+                        rows={3}  
+                        placeholder="(Optional)" 
+                        onChange={(e) => {request.description=e.target.value}}
+                    />
+                    <Box margin="8px 0px">
+                        <Typography textAlign="left" variant="h6">
+                            Options
+                        </Typography>
+                        <Divider/>
+                        <List
+                            sx={{position:"relative", width:"100%", height:"200px", overflow:'auto', scrollbarGutter:"stable", margin:"2px"}}
+                        >
+                            {items.map((item, idx) => 
+                                <ListItem>
+                                    <TextField 
+                                        value={item} 
+                                        fullWidth 
+                                        onChange={(e) => {changeItem(e.target.value, idx)}} 
+                                    />
+                                    <IconButton 
+                                        onClick={() => {removeItem(idx)}}
+                                    >
                                         <Delete fontSize="inherit"/>
                                     </IconButton>
-                                </Grid>
-                            </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            <IconButton onClick={() => {addItem('')}}>
+                                </ListItem>
+                            )}
+                            <IconButton 
+                                onClick={() => {addItem('')}}
+                            >
                                 <Add />
                             </IconButton>
-                        </Grid>
-                        <Grid item xs>
-                            <FormControlLabel
-                                control={
-                                    <Switch onChange={(e) => {request.isPrivate=e.target.checked}}/>
-                                }
-                                label="Private"
+                        </List>
+                        <Divider/>
+                    </Box>
+                    <Box sx={{display:"flex", justifyContent:"space-between", margin:"6px 0px"}}>
+                        <FormControlLabel
+                            control={
+                                <Switch 
+                                    onChange={(e) => {request.isPrivate=e.target.checked}}
+                                />
+                            }
+                            label="Private"
+                        />
+                        <FormControlLabel
+                            control={
+                                <Switch onChange={(e) => {request.isAnonymous=e.target.checked}}/>
+                            }
+                            label="Anonymous"
                             />
-                        </Grid>
-                        <Grid item xs>
-                            <FormControlLabel
-                                    control={
-                                        <Switch onChange={(e) => {request.isAnonymous=e.target.checked}}/>
-                                    }
-                                    label="Anonymous"
+                        <LocalizationProvider 
+                            dateAdapter={AdapterDayjs}
+                        >
+                            <DatePicker 
+                                onChange={(e) => {request.closedDate=new Date(e.toLocaleString())}}
                             />
-                        </Grid>
-                        <Grid item xs={5}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker onChange={(e) => {request.closedDate=new Date(e.toLocaleString())}}/>
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button variant="contained" onClick={() => submitRequest(request)}>Create</Button>
-                        </Grid>
-                    </Grid>
+                        </LocalizationProvider>
+                    </Box>
+                    <Button 
+                        variant="contained" 
+                        onClick={() => submitRequest(request)}
+                    >
+                        Create
+                    </Button>
+
                 </CardContent>
             </Card>
             <Modal
