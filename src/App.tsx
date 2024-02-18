@@ -1,9 +1,9 @@
-import LoginForm from "./components/LoginPage";
-import PollSubmitForm from "./components/PollSubmitPage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import PollForm from "./components/PollPage";
-import "./App.css";
 import { createContext, useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import LoginForm from "./components/LoginPage";
+import PollForm from "./components/PollPage";
+import PollSubmitForm from "./components/PollSubmitPage";
 import ProtectedRoute from "./utils/ProtectiveRoutes";
 
 export const AppContext = createContext(null);
@@ -16,7 +16,7 @@ const App = () => {
       <BrowserRouter>
         <div className="App">
           <Routes>
-            <Route path="/login" element={<LoginForm />} />
+            <Route path="/" element={<LoginForm />} />
             <Route
               path="/create-poll"
               element={
