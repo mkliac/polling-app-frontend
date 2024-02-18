@@ -6,13 +6,13 @@ import "./App.css";
 import { createContext, useState } from "react";
 import ProtectedRoute from "./utils/ProtectiveRoutes";
 
-export const AuthContext = createContext(null);
+export const AppContext = createContext(null);
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AppContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
       <BrowserRouter>
         <div className="App">
           <Routes>
@@ -36,7 +36,7 @@ const App = () => {
           </Routes>
         </div>
       </BrowserRouter>
-    </AuthContext.Provider>
+    </AppContext.Provider>
   );
 };
 

@@ -4,12 +4,12 @@ import { User } from "../models/UserModel";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import TokenService from "../services/TokenService";
-import { AuthContext } from "../App";
+import { AppContext } from "../App";
 import { Navigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [user, setUser] = useState<User>();
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AppContext);
 
   const getUser = () => {
     UserService.login()
