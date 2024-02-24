@@ -3,7 +3,7 @@ import {
   DeletePollItemsRequest,
   SavePollRequest,
 } from "../models/PollModels";
-import { deleteApi, getApi, postApi, putApi } from "../utils/api";
+import { deleteApi, getApi, postApi } from "../utils/api";
 
 const POLL_URI = "/polls";
 class PollService {
@@ -37,6 +37,10 @@ class PollService {
 
   vote(id: string, itemId: string) {
     return postApi(POLL_URI + `/${id}/items/${itemId}/vote`);
+  }
+
+  close(id: string) {
+    return postApi(POLL_URI + `/${id}/close`);
   }
 }
 

@@ -32,6 +32,5 @@ export interface Poll {
   isPrivate: boolean;
   createdAt: Date;
   createdBy: User;
-  closedAt: Date;
   closedDate: Date;
 }

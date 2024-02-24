@@ -72,6 +72,16 @@ const PollForm = () => {
       .catch((e) => console.log(e));
   };
 
+  const onClosePoll = () => {
+    setIsLoading(true);
+    PollService.close(id)
+      .then((data) => {
+        setPoll(data);
+        setIsLoading(false);
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <Box
       sx={{
@@ -101,12 +111,12 @@ const PollForm = () => {
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Close Poll">
-                    <IconButton>
+                    <IconButton onClick={() => onClosePoll()}>
                       <EventBusy fontSize="small" />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Delete Poll" onClick={() => onDeletePoll()}>
-                    <IconButton>
+                  <Tooltip title="Delete Poll">
+                    <IconButton onClick={() => onDeletePoll()}>
                       <DeleteForever fontSize="small" />
                     </IconButton>
                   </Tooltip>
