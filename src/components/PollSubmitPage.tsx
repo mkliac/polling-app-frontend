@@ -13,6 +13,7 @@ import {
   Switch,
   TextField,
   Typography,
+  styled,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,6 +22,13 @@ import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
 import LoadingPage from "./LoadingPage";
 import PollShareModal from "./PollShareModal";
+
+const CustomTextField = styled(TextField)({
+  "& .MuiFormHelperText-root.Mui-error": {
+    position: "absolute",
+    top: "100%",
+  },
+});
 
 const PollSubmitForm = () => {
   const [items, setItems] = useState([]);
@@ -130,6 +138,7 @@ const PollSubmitForm = () => {
               {items.map((item, idx) => (
                 <ListItem
                   key={idx}
+                  sx={{ margin: "4px 0px" }}
                   secondaryAction={
                     <IconButton
                       onClick={() => {
@@ -140,7 +149,7 @@ const PollSubmitForm = () => {
                     </IconButton>
                   }
                 >
-                  <TextField
+                  <CustomTextField
                     sx={{ marginRight: "12px" }}
                     value={item}
                     fullWidth
