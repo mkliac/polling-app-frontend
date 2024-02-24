@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import { User } from "./models/UserModel";
 import LoginForm from "./pages/LoginPage";
 import PollForm from "./pages/PollPage";
 import PollSubmitForm from "./pages/PollSubmitPage";
@@ -10,9 +11,10 @@ export const AppContext = createContext(null);
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<User>(null);
 
   return (
-    <AppContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+    <AppContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser }}>
       <BrowserRouter>
         <div className="App">
           <Routes>

@@ -1,15 +1,20 @@
+import { Add, DeleteForever, EventBusy, Remove } from "@mui/icons-material";
 import {
   Box,
   Button,
   Card,
   CardContent,
+  CardHeader,
   Divider,
+  IconButton,
   LinearProgress,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { AppContext } from "../App";
 import { Poll, PollItem } from "../models/PollModels";
 import PollService from "../services/PollService";
 import LoadingPage from "./LoadingPage";
@@ -19,6 +24,7 @@ const PollForm = () => {
   const [poll, setPoll] = useState<Poll>(undefined);
   const [totalVotes, setTotalVotes] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useContext(AppContext);
 
   const calItemContribution = (item: PollItem) => {
     return totalVotes === 0 ? 0 : (item.voteCount * 100.0) / totalVotes;
@@ -52,6 +58,17 @@ const PollForm = () => {
       .catch((e) => console.log(e));
   };
 
+  const onDeletePoll = () => {
+    setIsLoading(true);
+    PollService.deletePoll(id)
+      .then(() => {
+        console.log("Poll deleted");
+        setIsLoading(false);
+        alert("Poll deleted");
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <Box
       sx={{
@@ -63,7 +80,35 @@ const PollForm = () => {
     >
       <LoadingPage isLoading={isLoading} />
       {poll && (
-        <Card sx={{ width: "550px", padding: "20px 5px", margin: "0 auto" }}>
+        <Card sx={{ width: "550px", padding: "5px 5px", margin: "0 auto" }}>
+          {user.username === poll.createdBy.username && (
+            <CardHeader
+              action={
+                <Stack direction="row">
+                  <Tooltip title="Add Options">
+                    <IconButton>
+                      <Add fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Options">
+                    <IconButton>
+                      <Remove fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Close Poll">
+                    <IconButton>
+                      <EventBusy fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete Poll" onClick={() => onDeletePoll()}>
+                    <IconButton>
+                      <DeleteForever fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </Stack>
+              }
+            />
+          )}
           <CardContent
             sx={{
               maxWidth: "550px",
@@ -75,7 +120,7 @@ const PollForm = () => {
             <Box sx={{ marginBottom: "12px" }}>
               {poll.closedDate && (
                 <Typography textAlign="right">
-                  Expiry Date:
+                  Expiry Date:{" "}
                   {new Date(poll.closedDate).toLocaleDateString("en-GB")}
                 </Typography>
               )}

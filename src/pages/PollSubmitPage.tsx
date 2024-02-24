@@ -149,7 +149,7 @@ const PollSubmitForm = () => {
                     onChange={(e) => {
                       changeItem(e.target.value, idx);
                     }}
-                    error={!isTextValid(item)}
+                    error={!isTextValid(item, 1)}
                     helperText={getErrorMsg(item, 1)}
                   />
                 </ListItem>
