@@ -1,7 +1,3 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Poll, PollItem } from "../models/PollModels";
-import PollService from "../services/PollService";
 import {
   Box,
   Button,
@@ -9,10 +5,13 @@ import {
   CardContent,
   Divider,
   LinearProgress,
-  Modal,
   Stack,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Poll, PollItem } from "../models/PollModels";
+import PollService from "../services/PollService";
 import LoadingPage from "./LoadingPage";
 
 const PollForm = () => {
@@ -62,11 +61,7 @@ const PollForm = () => {
         display: "flex",
       }}
     >
-      <Modal open={isLoading}>
-        <Box>
-          <LoadingPage />
-        </Box>
-      </Modal>
+      <LoadingPage isLoading={isLoading} />
       {poll && (
         <Card sx={{ width: "550px", padding: "20px 5px", margin: "0 auto" }}>
           <CardContent

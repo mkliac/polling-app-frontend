@@ -1,17 +1,21 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Modal } from "@mui/material";
 
-const LoadingPage = () => {
+const LoadingPage = ({ isLoading }) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        height: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <CircularProgress />
-    </Box>
+    <Modal open={isLoading}>
+      <Box>
+        <Box
+          sx={{
+            display: "flex",
+            height: "100vh",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </Box>
+    </Modal>
   );
 };
 

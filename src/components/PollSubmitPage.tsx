@@ -1,3 +1,4 @@
+import { Add, Delete } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -13,12 +14,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
-import { Add, Delete } from "@mui/icons-material";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import LoadingPage from "./LoadingPage";
 import PollShareModal from "./PollShareModal";
 
 const PollSubmitForm = () => {
@@ -33,6 +34,7 @@ const PollSubmitForm = () => {
   });
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const removeItem = (index) => {
     setItems(items.filter((_, i) => i !== index));
@@ -49,13 +51,18 @@ const PollSubmitForm = () => {
   };
 
   const submitRequest = (request: SavePollRequest) => {
+    setIsLoading(true);
     request.items = items;
     PollService.savePoll(request)
       .then((res) => {
         setOpen(true);
         setId(res.id);
+        setIsLoading(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -67,6 +74,7 @@ const PollSubmitForm = () => {
         display: "flex",
       }}
     >
+      <LoadingPage isLoading={isLoading} />
       <Card sx={{ padding: "20px 5px", margin: "0 auto" }}>
         <Typography variant="h3">Create Poll</Typography>
         <CardContent
