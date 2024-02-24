@@ -11,24 +11,17 @@ import {
   ListItem,
   Modal,
   Switch,
-  TextField,
   Typography,
-  styled,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
+import CustomTextField from "../components/CustomTextField";
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
+import { getErrorMsg, isTextValid } from "../utils/TextValidator";
 import LoadingPage from "./LoadingPage";
 import PollShareModal from "./PollShareModal";
-
-const CustomTextField = styled(TextField)({
-  "& .MuiFormHelperText-root.Mui-error": {
-    position: "absolute",
-    top: "100%",
-  },
-});
 
 const PollSubmitForm = () => {
   const [items, setItems] = useState([]);
@@ -100,19 +93,19 @@ const PollSubmitForm = () => {
           <Typography variant="h6" textAlign="left">
             Title*
           </Typography>
-          <TextField
+          <CustomTextField
+            sx={{ marginBottom: "12px" }}
             fullWidth
-            required
             onChange={(e) => {
               setTitle(e.target.value);
             }}
-            error={request.title === ""}
-            helperText={request.title === "" ? "Required Field!" : ""}
+            error={!isTextValid(request.title)}
+            helperText={getErrorMsg(request.title)}
           />
           <Typography variant="h6" textAlign="left">
             Description
           </Typography>
-          <TextField
+          <CustomTextField
             fullWidth
             multiline
             rows={3}
@@ -156,8 +149,8 @@ const PollSubmitForm = () => {
                     onChange={(e) => {
                       changeItem(e.target.value, idx);
                     }}
-                    error={item === ""}
-                    helperText={item === "" ? "Required Field!" : ""}
+                    error={!isTextValid(item)}
+                    helperText={getErrorMsg(item, 1)}
                   />
                 </ListItem>
               ))}

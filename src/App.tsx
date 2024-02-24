@@ -1,9 +1,9 @@
 import { createContext, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import LoginForm from "./components/LoginPage";
-import PollForm from "./components/PollPage";
-import PollSubmitForm from "./components/PollSubmitPage";
+import LoginForm from "./pages/LoginPage";
+import PollForm from "./pages/PollPage";
+import PollSubmitForm from "./pages/PollSubmitPage";
 import ProtectedRoute from "./utils/ProtectiveRoutes";
 
 export const AppContext = createContext(null);
