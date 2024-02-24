@@ -24,7 +24,7 @@ import PollShareModal from "./PollShareModal";
 
 const PollSubmitForm = () => {
   const [items, setItems] = useState([]);
-  const [request] = useState<SavePollRequest>({
+  const [request, setRequest] = useState<SavePollRequest>({
     title: "",
     description: "",
     items: [],
@@ -35,6 +35,10 @@ const PollSubmitForm = () => {
   const [open, setOpen] = useState(false);
   const [id, setId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const setTitle = (newTitle: string) => {
+    setRequest({ ...request, title: newTitle });
+  };
 
   const removeItem = (index) => {
     setItems(items.filter((_, i) => i !== index));
@@ -91,10 +95,11 @@ const PollSubmitForm = () => {
           <TextField
             fullWidth
             required
-            placeholder="Title must not be empty"
             onChange={(e) => {
-              request.title = e.target.value;
+              setTitle(e.target.value);
             }}
+            error={request.title === ""}
+            helperText={request.title === "" ? "Required Field!" : ""}
           />
           <Typography variant="h6" textAlign="left">
             Description
@@ -120,34 +125,42 @@ const PollSubmitForm = () => {
                 height: "200px",
                 overflow: "auto",
                 scrollbarGutter: "stable",
-                margin: "2px",
               }}
             >
               {items.map((item, idx) => (
-                <ListItem>
+                <ListItem
+                  key={idx}
+                  secondaryAction={
+                    <IconButton
+                      onClick={() => {
+                        removeItem(idx);
+                      }}
+                    >
+                      <Delete fontSize="inherit" />
+                    </IconButton>
+                  }
+                >
                   <TextField
+                    sx={{ marginRight: "12px" }}
                     value={item}
                     fullWidth
                     onChange={(e) => {
                       changeItem(e.target.value, idx);
                     }}
+                    error={item === ""}
+                    helperText={item === "" ? "Required Field!" : ""}
                   />
-                  <IconButton
-                    onClick={() => {
-                      removeItem(idx);
-                    }}
-                  >
-                    <Delete fontSize="inherit" />
-                  </IconButton>
                 </ListItem>
               ))}
-              <IconButton
-                onClick={() => {
-                  addItem("");
-                }}
-              >
-                <Add />
-              </IconButton>
+              {items.length < 10 && (
+                <IconButton
+                  onClick={() => {
+                    addItem("");
+                  }}
+                >
+                  <Add />
+                </IconButton>
+              )}
             </List>
             <Divider />
           </Box>

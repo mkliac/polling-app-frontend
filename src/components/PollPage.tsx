@@ -75,7 +75,7 @@ const PollForm = () => {
             <Box sx={{ marginBottom: "12px" }}>
               {poll.closedDate && (
                 <Typography textAlign="right">
-                  Expiry Date:{" "}
+                  Expiry Date:
                   {new Date(poll.closedDate).toLocaleDateString("en-GB")}
                 </Typography>
               )}
