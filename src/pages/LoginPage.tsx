@@ -43,6 +43,7 @@ const LoginForm = () => {
         height: "100vh",
       }}
     >
+      {" "}
       <Card>
         <CardContent>
           <Typography textAlign={"left"} component="h1" fontSize={24}>

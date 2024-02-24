@@ -37,7 +37,10 @@ const PollForm = () => {
         setPoll(data);
         setIsLoading(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        console.log(e);
+        setIsLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ const PollForm = () => {
     setIsLoading(true);
     PollService.deletePoll(id)
       .then(() => {
-        console.log("Poll deleted");
+        setPoll(undefined);
         setIsLoading(false);
         alert("Poll deleted");
       })
@@ -79,7 +82,9 @@ const PollForm = () => {
       }}
     >
       <LoadingPage isLoading={isLoading} />
-      {poll && (
+      {poll === undefined ? (
+        <div>Poll with id {id} not exist </div>
+      ) : (
         <Card sx={{ width: "550px", padding: "5px 5px", margin: "0 auto" }}>
           {user.username === poll.createdBy.username && (
             <CardHeader
