@@ -13,14 +13,14 @@ import {
 } from "redux-persist";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
+import sessionStorage from "redux-persist/es/storage/session";
 import { PersistGate } from "redux-persist/integration/react";
-import storage from "redux-persist/lib/storage";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import authReducer from "./state";
 
-const persistConfig = { key: "root", storage, version: 1 };
+const persistConfig = { key: "root", storage: sessionStorage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
 const store = configureStore({
   reducer: persistedReducer,

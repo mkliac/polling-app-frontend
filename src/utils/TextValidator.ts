@@ -5,7 +5,7 @@ export const getErrorMsg = (text: string, minLength?: number) => {
     minLength = defaultMinLength;
   }
   const diff = minLength - text.length;
-  if (diff == 1) {
+  if (diff === 1) {
     return "This field cannot be empty";
   }
   if (diff > 0) {
