@@ -1,23 +1,25 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
-import { useContext, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import { AppContext } from "../App";
 import TokenService from "../services/TokenService";
 import UserService from "../services/UserService";
+import { setLogin, setLogout } from "../state";
 
 const LoginForm = () => {
-  const { isLoggedIn, setIsLoggedIn, setUser } = useContext(AppContext);
+  const isLoggedIn = useSelector(
+    (state: { isLoggedIn: boolean }) => state.isLoggedIn
+  );
+  const dispatch = useDispatch();
 
   const getUser = () => {
     UserService.login()
       .then((data) => {
-        setUser(data);
-        setIsLoggedIn(true);
+        dispatch(setLogin({ user: data }));
       })
       .catch(() => {
-        setUser(null);
-        setIsLoggedIn(false);
+        dispatch(setLogout());
       });
   };
 

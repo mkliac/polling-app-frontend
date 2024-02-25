@@ -1,7 +1,5 @@
 import axios from "axios";
 import TokenService from "../services/TokenService";
-import { AppContext } from "../App";
-import { useContext } from "react";
 
 const BACKEND_URL = process.env.REACT_APP_SERVER_BASE_URL;
 // const BACKEND_URL = "http://localhost:8080"

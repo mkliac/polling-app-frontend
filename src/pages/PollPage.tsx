@@ -12,10 +12,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { AppContext } from "../App";
 import { Poll, PollItem } from "../models/PollModels";
+import { User } from "../models/UserModel";
 import PollService from "../services/PollService";
 import LoadingPage from "./LoadingPage";
 
@@ -24,7 +25,7 @@ const PollForm = () => {
   const [poll, setPoll] = useState<Poll>(undefined);
   const [totalVotes, setTotalVotes] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useContext(AppContext);
+  const user = useSelector((state: { user: User }) => state.user);
 
   const calItemContribution = (item: PollItem) => {
     return totalVotes === 0 ? 0 : (item.voteCount * 100.0) / totalVotes;

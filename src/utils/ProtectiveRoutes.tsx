@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
-import { AppContext } from "../App";
 
 const ProtectedRoute = ({ children }) => {
-  const { isLoggedIn } = useContext(AppContext);
+  const isLoggedIn: boolean = useSelector(
+    (state: { isLoggedIn: boolean }) => state.isLoggedIn
+  );
   const prevLocation = useLocation();
 
   if (!isLoggedIn) {
