@@ -19,7 +19,7 @@ import { useState } from "react";
 import CustomTextField from "../components/CustomTextField";
 import { SavePollRequest } from "../models/PollModels";
 import PollService from "../services/PollService";
-import { getErrorMsg, isTextValid } from "../utils/TextValidator";
+import { getErrorMsg, isTextValid } from "../utils/TextUtil";
 import LoadingPage from "./LoadingPage";
 import PollShareModal from "./PollShareModal";
 

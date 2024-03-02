@@ -28,6 +28,7 @@ const LoginForm = () => {
   };
 
   const onSuccess = (res) => {
+    console.log(res);
     TokenService.saveToken(res.credential);
     getUser();
   };

@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import HomePage from "./pages/HomePage";
 import LoginForm from "./pages/LoginPage";
 import PollForm from "./pages/PollPage";
 import PollSubmitForm from "./pages/PollSubmitPage";
@@ -33,6 +34,14 @@ const App = () => {
               element={
                 <ProtectedRoute>
                   <PollForm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute>
+                  <HomePage />
                 </ProtectedRoute>
               }
             />
