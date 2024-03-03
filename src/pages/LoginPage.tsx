@@ -64,7 +64,7 @@ const LoginForm = () => {
             />
           ) : (
             <Navigate
-              to={sessionStorage.getItem("redirect") || "/create-poll"}
+              to={sessionStorage.getItem("redirect") || "/home"}
             />
           )}
         </CardContent>
