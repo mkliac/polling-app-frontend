@@ -1,13 +1,11 @@
 import { Add, DeleteForever, EventBusy, Remove } from "@mui/icons-material";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Divider,
   IconButton,
-  LinearProgress,
   Stack,
   Tooltip,
   Typography,
@@ -15,21 +13,18 @@ import {
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Poll, PollItem } from "../models/PollModels";
+import { Poll } from "../models/PollModels";
 import { User } from "../models/UserModel";
 import PollService from "../services/PollService";
 import LoadingPage from "./LoadingPage";
+import PollItemsButton from "../components/PollItemsButton";
 
 const PollForm = () => {
   const { id } = useParams();
   const [poll, setPoll] = useState<Poll>(undefined);
-  const [totalVotes, setTotalVotes] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state: { user: User }) => state.user);
 
-  const calItemContribution = (item: PollItem) => {
-    return totalVotes === 0 ? 0 : (item.voteCount * 100.0) / totalVotes;
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,24 +38,6 @@ const PollForm = () => {
         setIsLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    setTotalVotes(
-      poll !== undefined
-        ? poll.items.map((i) => i.voteCount).reduce((a, b) => a + b)
-        : 0
-    );
-  }, [poll]);
-
-  const onVote = (item: PollItem) => {
-    setIsLoading(true);
-    PollService.vote(poll.id, item.id)
-      .then((data) => {
-        setPoll(data);
-        setIsLoading(false);
-      })
-      .catch((e) => console.log(e));
-  };
 
   const onDeletePoll = () => {
     setIsLoading(true);
@@ -156,36 +133,7 @@ const PollForm = () => {
                 {poll.description}
               </Typography>
             </Box>
-            <Stack overflow="auto" spacing={2} sx={{ flex: 1 }}>
-              {poll.items.map((item, idx) => (
-                <Button
-                  key={idx}
-                  sx={{ textTransform: "none" }}
-                  onClick={() => onVote(item)}
-                >
-                  <Box sx={{ width: "100%" }}>
-                    <Typography textAlign="left">{item.text}</Typography>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Box sx={{ width: "100%", mr: 1 }}>
-                        <LinearProgress
-                          sx={{ height: "16px" }}
-                          variant="determinate"
-                          value={calItemContribution(item)}
-                        />
-                      </Box>
-                      <Box sx={{ minWidth: 35 }}>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                        >{`${Math.round(
-                          calItemContribution(item)
-                        )}%`}</Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-                </Button>
-              ))}
-            </Stack>
+            <PollItemsButton poll={poll} setPoll={setPoll} />
           </CardContent>
         </Card>
       )}

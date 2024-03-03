@@ -1,53 +1,29 @@
-import { Box, Typography } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { useState } from "react";
 import NavBar from "../components/NavBar";
+import PollsWidget from "../components/PollsWidget";
 import SideBar from "../components/SideBar";
 
 const HomePage = () => {
   const [isSideBarExtend, setIsSideBarExtend] = useState(true);
+  const theme = useTheme();
 
   return (
     <Box width="100%" height="100%">
-      <Box position="fixed" width="100%" height="100%">
+      <Box position="sticky" width="100%" zIndex={1} sx={{top: "0"}}>
         <NavBar
           isSideBarExtend={isSideBarExtend}
           setIsSideBarExtend={setIsSideBarExtend}
         />
+      </Box>
+      <Box position="fixed" height="100%" zIndex={1}>
         <SideBar isExtend={isSideBarExtend} />
       </Box>
-      <Box>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
-        <Typography variant="h1">Home Page</Typography>
+      <Box sx={{width: "100%", display: "flex", padding: "0.2rem 6%", gap: "0.5rem", justifyContent: "center"}}>
+        <Box flexBasis="42%" maxWidth="42%">
+          <PollsWidget />
+        </Box>
+
       </Box>
     </Box>
   );
