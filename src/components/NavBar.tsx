@@ -6,21 +6,16 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { User } from "../models/UserModel";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
+import { toggleSideBar } from "../state";
 
-const NavBar = ({
-  isSideBarExtend,
-  setIsSideBarExtend,
-}: {
-  isSideBarExtend: boolean;
-  setIsSideBarExtend: Dispatch<SetStateAction<boolean>>;
-}) => {
+const NavBar = () => {
   const theme = useTheme();
   const user = useSelector((state: { user: User }) => state.user);
+  const dispatch = useDispatch();
 
   return (
     <Box
@@ -28,7 +23,7 @@ const NavBar = ({
     >
       <FlexBetween sx={{ padding: "0.1rem 0.5rem" }}>
         <FlexBetween sx={{ gap: "1rem" }}>
-          <IconButton onClick={() => setIsSideBarExtend(!isSideBarExtend)}>
+          <IconButton onClick={() => dispatch(toggleSideBar())}>
             <Menu />
           </IconButton>
           <Typography

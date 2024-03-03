@@ -7,9 +7,14 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
-const SideBar = ({ isExtend }) => {
+const SideBar = () => {
   const theme = useTheme();
+  const isExtend = useSelector(
+    (state: { isSideBarExtend: boolean }) => state.isSideBarExtend
+  );
+
   return (
     <Box
       sx={{
