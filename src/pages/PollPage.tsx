@@ -11,53 +11,46 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { Poll } from "../models/PollModels";
-import { User } from "../models/UserModel";
-import PollService from "../services/PollService";
+import { Poll, PollItem } from "../models/PollModels";
+import { closePoll, deletePoll, getPoll, vote } from "../services/PollService";
 import LoadingPage from "./LoadingPage";
 import PollItemsButton from "../components/PollItemsButton";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { selectPoll } from "../redux/reducers/PollSlice";
+import { selectUser } from "../redux/reducers/AuthSlice";
 
 const PollForm = () => {
   const { id } = useParams();
-  const [poll, setPoll] = useState<Poll>(undefined);
+  const pollData = useAppSelector(selectPoll);
+  const dispatch = useAppDispatch();
+  const [poll, setPoll] = useState<Poll>(pollData);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector((state: { user: User }) => state.user);
-
+  const user = useAppSelector(selectUser);
+  const [checkItemId, setCheckItemId] = useState<string>("");
 
   useEffect(() => {
-    setIsLoading(true);
-    PollService.getPoll(id)
-      .then((data) => {
-        setPoll(data);
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setIsLoading(false);
-      });
+    dispatch(getPoll(id));
   }, []);
 
+  const onVote = (item: PollItem) => {
+    dispatch(vote({id: poll.id, itemId: item.id})).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") setCheckItemId(item.id);
+    });
+  };
+
+  useEffect(() => {
+    if (pollData.id === id) {
+      setPoll(pollData);
+    }
+  }, [pollData]);
+
   const onDeletePoll = () => {
-    setIsLoading(true);
-    PollService.deletePoll(id)
-      .then(() => {
-        setPoll(undefined);
-        setIsLoading(false);
-        alert("Poll deleted");
-      })
-      .catch((e) => console.log(e));
+    dispatch(deletePoll(id));
   };
 
   const onClosePoll = () => {
-    setIsLoading(true);
-    PollService.close(id)
-      .then((data) => {
-        setPoll(data);
-        setIsLoading(false);
-      })
-      .catch((e) => console.log(e));
+    dispatch(closePoll(id));
   };
 
   return (
@@ -133,7 +126,7 @@ const PollForm = () => {
                 {poll.description}
               </Typography>
             </Box>
-            <PollItemsButton poll={poll} setPoll={setPoll} />
+            <PollItemsButton poll={poll} onVote={onVote} checkItemId={checkItemId}/>
           </CardContent>
         </Card>
       )}

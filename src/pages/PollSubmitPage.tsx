@@ -15,10 +15,13 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomTextField from "../components/CustomTextField";
-import { SavePollRequest } from "../models/PollModels";
-import PollService from "../services/PollService";
+import { Poll, SavePollRequest } from "../models/PollModels";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { resetSubmitStatus, selectPoll, selectSubmitStatus } from "../redux/reducers/PollSlice";
+import { savePoll } from "../services/PollService";
+import { APIStatus } from "../types/ApiStatusType";
 import { getErrorMsg, isTextValid } from "../utils/TextUtil";
 import LoadingPage from "./LoadingPage";
 import PollShareModal from "./PollShareModal";
@@ -34,8 +37,11 @@ const PollSubmitForm = () => {
     closedDate: undefined,
   });
   const [open, setOpen] = useState(false);
-  const [id, setId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const poll: Poll = useAppSelector(selectPoll);
+  const status = useAppSelector(selectSubmitStatus);
+  const [id, setId] = useState("");
+  const dispatch = useAppDispatch();
 
   const setTitle = (newTitle: string) => {
     setRequest({ ...request, title: newTitle });
@@ -56,19 +62,17 @@ const PollSubmitForm = () => {
   };
 
   const submitRequest = (request: SavePollRequest) => {
-    setIsLoading(true);
     request.items = items;
-    PollService.savePoll(request)
-      .then((res) => {
-        setOpen(true);
-        setId(res.id);
-        setIsLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-        setIsLoading(false);
-      });
+    dispatch(savePoll(request));
   };
+
+  useEffect(() => {
+    if (status === APIStatus.SUCCESS) {
+      setId(poll.id);
+      setOpen(true);
+      dispatch(resetSubmitStatus());
+    }
+  }, [status]);
 
   return (
     <Box

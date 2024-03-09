@@ -1,5 +1,4 @@
 import { Box, useTheme } from "@mui/material";
-import { useState } from "react";
 import NavBar from "../components/NavBar";
 import PollsWidget from "../components/PollsWidget";
 import SideBar from "../components/SideBar";

@@ -1,11 +1,30 @@
 import { Divider, Typography } from "@mui/material";
-import { useState } from "react";
-import { Poll } from "../models/PollModels";
+import { useEffect, useState } from "react";
+import { Poll, PollItem } from "../models/PollModels";
 import PollItemsButton from "./PollItemsButton";
 import WidgetWrapper from "./WidgetWrapper";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { selectPoll } from "../redux/reducers/PollSlice";
+import { vote } from "../services/PollService";
 
 const PollWidget = ({ poll }: { poll: Poll }) => {
   const [myPoll, setMyPoll] = useState<Poll>(poll);
+  const dispatch = useAppDispatch();
+  const activePoll = useAppSelector(selectPoll);
+  const [checkItemId, setCheckItemId] = useState<string>("");
+
+  const onVote = (item: PollItem) => {
+    dispatch(vote({ id: myPoll.id, itemId: item.id })).then((res) => {
+      if (res.meta.requestStatus === "fulfilled")
+        setCheckItemId(item.id);
+    });
+  };
+
+  useEffect(() => {
+    if (activePoll && activePoll.id === myPoll.id)
+      setMyPoll(activePoll);
+  }, [activePoll]);
+
   return (
     <WidgetWrapper m="2rem 0">
       <Typography variant="h4" sx={{ mt: "1rem", textAlign: "left" }}>
@@ -16,7 +35,7 @@ const PollWidget = ({ poll }: { poll: Poll }) => {
       </Typography>
       <Divider />
       <br />
-      <PollItemsButton poll={myPoll} setPoll={setMyPoll} />
+      <PollItemsButton poll={myPoll} onVote={onVote} checkItemId={checkItemId}/>
     </WidgetWrapper>
   );
 };

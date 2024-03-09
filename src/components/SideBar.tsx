@@ -7,13 +7,12 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../redux/hook";
+import { selectSideBar } from "../redux/reducers/AuthSlice";
 
 const SideBar = () => {
   const theme = useTheme();
-  const isExtend = useSelector(
-    (state: { isSideBarExtend: boolean }) => state.isSideBarExtend
-  );
+  const isExtend = useAppSelector(selectSideBar);
 
   return (
     <Box

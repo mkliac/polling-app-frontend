@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../models/UserModel";
+import { User } from "../../models/UserModel";
 
 interface GlobalState {
   mode: "light" | "dark";
@@ -37,4 +37,8 @@ export const authSlice = createSlice({
 });
 
 export const { setMode, setLogin, setLogout, toggleSideBar} = authSlice.actions;
+export const selectIsLoggedIn = (state: { auth: GlobalState }) => state.auth.isLoggedIn;
+export const selectUser = (state: { auth: GlobalState }) => state.auth.user;
+export const selectMode = (state: { auth: GlobalState }) => state.auth.mode;
+export const selectSideBar = (state: { auth: GlobalState }) => state.auth.isSideBarExtend;
 export default authSlice.reducer;

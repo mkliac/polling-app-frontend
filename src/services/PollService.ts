@@ -1,47 +1,159 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   AddPollItemsRequest,
   DeletePollItemsRequest,
+  Poll,
   SavePollRequest,
 } from "../models/PollModels";
 import { deleteApi, getApi, postApi } from "../utils/api";
+import { RequestError } from "../types/ApiStatusType";
 
 const POLL_URI = "/polls";
-class PollService {
-  getPoll(id: string) {
-    return getApi(POLL_URI + `/${id}`);
-  }
+export const getPoll = createAsyncThunk<Poll, string, { rejectValue: RequestError }>(
+  "polls/getPoll",
+  async (id: string, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await getApi(POLL_URI + `/${id}`);
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: `Failed to fetch poll with id=${id}` });
+    }
 
-  getPolls() {
-    return getApi(POLL_URI);
+    return data;
   }
+)
 
-  savePoll(reqBody: SavePollRequest) {
-    return postApi(POLL_URI, reqBody);
+export const getPolls = createAsyncThunk<Poll[], void, { rejectValue: RequestError }>(
+  "polls/getPolls",
+  async (_, thunkAPI) => {
+    let data: Poll[] = [];
+    try {
+      const polls = await getApi(POLL_URI);
+      data = polls.map((poll: Poll) => {
+        return {
+          ...poll
+        }
+      })
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: "Failed to fetch polls" });
+    }
+
+    return data;
   }
+)
 
-  deletePoll(id: string) {
-    return deleteApi(POLL_URI + `/${id}`);
+export const savePoll = createAsyncThunk<Poll, SavePollRequest, { rejectValue: RequestError }>(
+  "polls/savePoll",
+  async (reqBody: SavePollRequest, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await postApi(POLL_URI, reqBody);
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: "Failed to save poll" });
+    }
+
+    return data;
   }
+)
 
-  addPollItems(id: string, reqBody: AddPollItemsRequest) {
-    return postApi(POLL_URI + `/${id}/items`, reqBody);
+export const deletePoll = createAsyncThunk<void, string, { rejectValue: RequestError }>(
+  "polls/deletePoll",
+  async (id: string, thunkAPI) => {
+    try {
+      await deleteApi(POLL_URI + `/${id}`);
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: `Failed to delete poll with id=${id}` });
+    }
   }
+)
 
-  deletePollItems(id: string, reqBody: DeletePollItemsRequest) {
-    return deleteApi(POLL_URI + `/${id}/items`, reqBody);
+export const addPollItems = createAsyncThunk<Poll, { id: string, reqBody: AddPollItemsRequest }, { rejectValue: RequestError }>(
+  "polls/addPollItems",
+  async ({ id, reqBody }, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await postApi(POLL_URI + `/${id}/items`, reqBody);
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: `Failed to add poll items to poll with id=${id}` });
+    }
+
+    return data;
   }
+)
 
-  updatePollItem(id: string, itemId: string, text: string) {
-    return postApi(POLL_URI + `/${id}/items/${itemId}`, null, { text });
+export const deletePollItems = createAsyncThunk<Poll, { id: string, reqBody: DeletePollItemsRequest }, { rejectValue: RequestError }>(
+  "polls/deletePollItems",
+  async ({ id, reqBody }, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await deleteApi(POLL_URI + `/${id}/items`, reqBody);
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: `Failed to delete poll items from poll with id=${id}` });
+    }
+
+    return data;
   }
+)
 
-  vote(id: string, itemId: string) {
-    return postApi(POLL_URI + `/${id}/items/${itemId}/vote`);
+export const updatePollItem = createAsyncThunk<Poll, { id: string, itemId: string, text: string }, { rejectValue: RequestError }>(
+  "polls/updatePollItem",
+  async ({ id, itemId, text }, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await postApi(POLL_URI + `/${id}/items/${itemId}`, null, { text });
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: `Failed to update poll item with id=${itemId}` });
+    }
+
+    return data;
   }
+)
 
-  close(id: string) {
-    return postApi(POLL_URI + `/${id}/close`);
+export const vote = createAsyncThunk<Poll, { id: string, itemId: string }, { rejectValue: RequestError }>(
+  "polls/vote",
+  async ({ id, itemId }, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await postApi(POLL_URI + `/${id}/items/${itemId}/vote`);
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: "Failed to vote" });
+    }
+
+    return data;
   }
-}
+)
 
-export default new PollService();
+export const closePoll = createAsyncThunk<Poll, string, { rejectValue: RequestError }>(
+  "polls/closePoll",
+  async (id: string, thunkAPI) => {
+    let data: Poll = null;
+    try {
+      const poll = await postApi(POLL_URI + `/${id}/close`);
+      data = {
+        ...poll
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ message: `Failed to close poll with id=${id}` });
+    }
+
+    return data;
+  }
+)

@@ -6,16 +6,15 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { User } from "../models/UserModel";
+import { selectUser, toggleSideBar } from "../redux/reducers/AuthSlice";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
-import { toggleSideBar } from "../state";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 
 const NavBar = () => {
   const theme = useTheme();
-  const user = useSelector((state: { user: User }) => state.user);
-  const dispatch = useDispatch();
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
 
   return (
     <Box
@@ -42,7 +41,7 @@ const NavBar = () => {
             backgroundColor: theme.palette.background.default,
           }}
         >
-          <InputBase placeholder="Search..." />
+          <InputBase placeholder="Search..." fullWidth/>
           <IconButton>
             <Search />
           </IconButton>
