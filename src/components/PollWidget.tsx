@@ -8,17 +8,17 @@ import PollItemsButton from "./PollItemsButton";
 import WidgetWrapper from "./WidgetWrapper";
 
 const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
-  const [myPoll, setMyPoll] = useState<Poll>(initPoll);
-  const dispatch = useAppDispatch();
+  const [poll, setPoll] = useState<Poll>(initPoll);
   const [checkItemId, setCheckItemId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   const onVote = (item: PollItem) => {
     setIsLoading(true);
-    dispatch(vote({ id: myPoll.id, itemId: item.id }))
+    dispatch(vote({ id: poll.id, itemId: item.id }))
       .unwrap()
       .then((res) => {
-        setMyPoll(res);
+        setPoll(res);
         setCheckItemId(item.id);
       })
       .catch((err) => {
@@ -32,18 +32,14 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
   return (
     <WidgetWrapper m="2rem 0" position="relative">
       <Typography variant="h4" sx={{ mt: "1rem", textAlign: "left" }}>
-        {myPoll.title}
+        {poll.title}
       </Typography>
       <Typography paragraph sx={{ mt: "0.5rem", textAlign: "left" }}>
-        {myPoll.description}
+        {poll.description}
       </Typography>
       <Divider />
       <br />
-      <PollItemsButton
-        poll={myPoll}
-        onVote={onVote}
-        checkItemId={checkItemId}
-      />
+      <PollItemsButton poll={poll} onVote={onVote} checkItemId={checkItemId} />
       {isLoading && <LoadingContent />}
     </WidgetWrapper>
   );

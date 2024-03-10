@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import { Poll } from "../models/PollModels";
-import { User } from "../models/UserModel";
-import { getPolls } from "../services/PollService";
-import PollWidget from "./PollWidget";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectPolls } from "../redux/reducers/PollSlice";
 import { selectUser } from "../redux/reducers/AuthSlice";
+import { selectPollStatus, selectPolls } from "../redux/reducers/PollSlice";
+import { getPolls } from "../services/PollService";
+import { APIStatus } from "../types/ApiStatusType";
+import LoadingOverlay from "./LoadingOverlay";
+import PollWidget from "./PollWidget";
 
 const PollsWidget = () => {
   const user = useAppSelector(selectUser);
   const polls: Poll[] = useAppSelector(selectPolls);
+  const status = useAppSelector(selectPollStatus);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const PollsWidget = () => {
       {polls.map((poll) => (
         <PollWidget initPoll={poll} key={poll.id} />
       ))}
+      {status === APIStatus.LOADING && <LoadingOverlay isLoading={true} />}
     </>
   );
 };

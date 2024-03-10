@@ -1,4 +1,9 @@
-import { Bookmarks, FolderOpen, Window } from "@mui/icons-material";
+import {
+  AddBox,
+  Bookmarks,
+  FolderOpen,
+  Window
+} from "@mui/icons-material";
 import {
   Box,
   List,
@@ -7,12 +12,14 @@ import {
   ListItemText,
   useTheme,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../redux/hook";
 import { selectSideBar } from "../redux/reducers/AuthSlice";
 
 const MenuBar = () => {
   const theme = useTheme();
   const isExtend = useAppSelector(selectSideBar);
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -41,6 +48,16 @@ const MenuBar = () => {
             <Bookmarks />
           </ListItemIcon>
           <ListItemText primary={isExtend ? "Bookmarks" : ""} />
+        </ListItem>
+        <ListItem
+          button
+          sx={{ minHeight: "3rem" }}
+          onClick={() => navigate("/create-poll")}
+        >
+          <ListItemIcon>
+            <AddBox />
+          </ListItemIcon>
+          <ListItemText primary={isExtend ? "Create Poll" : ""} />
         </ListItem>
       </List>
     </Box>
