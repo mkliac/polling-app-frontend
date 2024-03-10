@@ -10,7 +10,7 @@ import {
 import { useAppSelector } from "../redux/hook";
 import { selectSideBar } from "../redux/reducers/AuthSlice";
 
-const SideBar = () => {
+const MenuBar = () => {
   const theme = useTheme();
   const isExtend = useAppSelector(selectSideBar);
 
@@ -47,4 +47,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
+export default MenuBar;

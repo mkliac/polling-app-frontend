@@ -1,7 +1,7 @@
 import { Box, useTheme } from "@mui/material";
+import MenuBar from "../components/MenuBar";
 import NavBar from "../components/NavBar";
 import PollsWidget from "../components/PollsWidget";
-import SideBar from "../components/SideBar";
 
 const HomePage = () => {
   const theme = useTheme();
@@ -12,7 +12,7 @@ const HomePage = () => {
         <NavBar />
       </Box>
       <Box position="fixed" height="100%" zIndex={1}>
-        <SideBar />
+        <MenuBar />
       </Box>
       <Box
         sx={{
