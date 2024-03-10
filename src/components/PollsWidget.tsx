@@ -20,7 +20,7 @@ const PollsWidget = () => {
   return (
     <>
       {polls.map((poll) => (
-        <PollWidget poll={poll} key={poll.id} />
+        <PollWidget initPoll={poll} key={poll.id} />
       ))}
     </>
   );

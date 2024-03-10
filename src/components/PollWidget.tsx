@@ -3,35 +3,33 @@ import { useEffect, useState } from "react";
 import { Poll, PollItem } from "../models/PollModels";
 import PollItemsButton from "./PollItemsButton";
 import WidgetWrapper from "./WidgetWrapper";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectPoll } from "../redux/reducers/PollSlice";
+import { useAppDispatch} from "../redux/hook";
 import { vote } from "../services/PollService";
 
-const PollWidget = ({ poll }: { poll: Poll }) => {
-  const [myPoll, setMyPoll] = useState<Poll>(poll);
+const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
+  const [myPoll, setMyPoll] = useState<Poll>(initPoll);
   const dispatch = useAppDispatch();
-  const activePoll = useAppSelector(selectPoll);
   const [checkItemId, setCheckItemId] = useState<string>("");
 
   const onVote = (item: PollItem) => {
-    dispatch(vote({ id: myPoll.id, itemId: item.id })).then((res) => {
-      if (res.meta.requestStatus === "fulfilled")
-        setCheckItemId(item.id);
+    dispatch(vote({ id: myPoll.id, itemId: item.id }))
+    .unwrap()
+    .then((res) => {
+      setMyPoll(res);
+      setCheckItemId(item.id);
+    })
+    .catch((err) => {
+      console.log(err);
     });
   };
-
-  useEffect(() => {
-    if (activePoll && activePoll.id === myPoll.id)
-      setMyPoll(activePoll);
-  }, [activePoll]);
 
   return (
     <WidgetWrapper m="2rem 0">
       <Typography variant="h4" sx={{ mt: "1rem", textAlign: "left" }}>
-        {poll.title}
+        {myPoll.title}
       </Typography>
       <Typography paragraph sx={{ mt: "0.5rem", textAlign: "left" }}>
-        {poll.description}
+        {myPoll.description}
       </Typography>
       <Divider />
       <br />
