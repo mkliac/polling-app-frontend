@@ -18,9 +18,10 @@ const PollsWidget = () => {
     dispatch(getPolls());
   }, []);
 
+  console.log(polls);
   return (
     <>
-      {polls.map((poll) => (
+      {status === APIStatus.SUCCESS && polls.map((poll) => (
         <PollWidget initPoll={poll} key={poll.id} />
       ))}
       {status === APIStatus.LOADING && <LoadingOverlay isLoading={true} />}

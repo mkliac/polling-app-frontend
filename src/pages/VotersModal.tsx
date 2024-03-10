@@ -67,7 +67,7 @@ const VotersModal = ({
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
             {voters.map((user) => (
-              <ListItem>
+              <ListItem key={user.id}>
                 <ListItemAvatar>
                   <CustomAvatar name={user.username} />
                 </ListItemAvatar>
