@@ -23,7 +23,7 @@ const HomePage = () => {
           justifyContent: "center",
         }}
       >
-        <Box flexBasis="42%" maxWidth="42%">
+        <Box maxWidth="32rem">
           <PollsWidget />
         </Box>
       </Box>

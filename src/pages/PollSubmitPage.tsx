@@ -17,13 +17,17 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useEffect, useState } from "react";
 import CustomTextField from "../components/CustomTextField";
+import LoadingOverlay from "../components/LoadingOverlay";
 import { Poll, SavePollRequest } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { resetSubmitStatus, selectPoll, selectSubmitStatus } from "../redux/reducers/PollSlice";
+import {
+  resetSubmitStatus,
+  selectPoll,
+  selectSubmitStatus,
+} from "../redux/reducers/PollSlice";
 import { savePoll } from "../services/PollService";
 import { APIStatus } from "../types/ApiStatusType";
 import { getErrorMsg, isTextValid } from "../utils/TextUtil";
-import LoadingPage from "./LoadingPage";
 import PollShareModal from "./PollShareModal";
 
 const PollSubmitForm = () => {
@@ -83,7 +87,7 @@ const PollSubmitForm = () => {
         display: "flex",
       }}
     >
-      <LoadingPage isLoading={isLoading} />
+      <LoadingOverlay isLoading={isLoading} />
       <Card sx={{ padding: "20px 5px", margin: "0 auto" }}>
         <Typography variant="h3">Create Poll</Typography>
         <CardContent

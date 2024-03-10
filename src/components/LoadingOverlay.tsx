@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Modal } from "@mui/material";
 
-const LoadingPage = ({ isLoading }) => {
+const LoadingOverlay = ({ isLoading }) => {
   return (
     <Modal open={isLoading}>
       <Box>
@@ -19,4 +19,4 @@ const LoadingPage = ({ isLoading }) => {
   );
 };
 
-export default LoadingPage;
+export default LoadingOverlay;

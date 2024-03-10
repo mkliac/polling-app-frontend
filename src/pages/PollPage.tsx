@@ -12,13 +12,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Poll, PollItem } from "../models/PollModels";
-import { closePoll, deletePoll, getPoll, vote } from "../services/PollService";
-import LoadingPage from "./LoadingPage";
+import LoadingOverlay from "../components/LoadingOverlay";
 import PollItemsButton from "../components/PollItemsButton";
+import { Poll, PollItem } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectPoll } from "../redux/reducers/PollSlice";
 import { selectUser } from "../redux/reducers/AuthSlice";
+import { selectPoll } from "../redux/reducers/PollSlice";
+import { closePoll, deletePoll, getPoll, vote } from "../services/PollService";
 
 const PollForm = () => {
   const { id } = useParams();
@@ -34,7 +34,7 @@ const PollForm = () => {
   }, []);
 
   const onVote = (item: PollItem) => {
-    dispatch(vote({id: poll.id, itemId: item.id})).then((res) => {
+    dispatch(vote({ id: poll.id, itemId: item.id })).then((res) => {
       if (res.meta.requestStatus === "fulfilled") setCheckItemId(item.id);
     });
   };
@@ -62,7 +62,7 @@ const PollForm = () => {
         display: "flex",
       }}
     >
-      <LoadingPage isLoading={isLoading} />
+      <LoadingOverlay isLoading={isLoading} />
       {poll === undefined ? (
         <div>Poll with id {id} not exist </div>
       ) : (
@@ -126,7 +126,11 @@ const PollForm = () => {
                 {poll.description}
               </Typography>
             </Box>
-            <PollItemsButton poll={poll} onVote={onVote} checkItemId={checkItemId}/>
+            <PollItemsButton
+              poll={poll}
+              onVote={onVote}
+              checkItemId={checkItemId}
+            />
           </CardContent>
         </Card>
       )}
