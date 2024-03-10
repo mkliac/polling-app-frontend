@@ -60,6 +60,7 @@ const PollItemsButton = ({
               "&:hover": {
                 background: "none",
                 border: "0.13rem solid black",
+                transition: "0.05s"
               },
               border: "0.13rem solid",
               borderColor: checkItemId === item.id ? "black" : "#dcdcdc",

@@ -22,15 +22,21 @@ import { closePoll, deletePoll, getPoll, vote } from "../services/PollService";
 
 const PollForm = () => {
   const { id } = useParams();
-  const pollData = useAppSelector(selectPoll);
   const dispatch = useAppDispatch();
-  const [poll, setPoll] = useState<Poll>(pollData);
+  const [poll, setPoll] = useState<Poll>(undefined);
   const [isLoading, setIsLoading] = useState(false);
   const user = useAppSelector(selectUser);
   const [checkItemId, setCheckItemId] = useState<string>("");
 
   useEffect(() => {
-    dispatch(getPoll(id));
+    setIsLoading(true);
+    dispatch(getPoll(id)).unwrap().then((res) => {
+      setPoll(res);
+    }).catch((err) => {
+      console.log(err);
+    }).finally(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   const onVote = (item: PollItem) => {
@@ -38,12 +44,6 @@ const PollForm = () => {
       if (res.meta.requestStatus === "fulfilled") setCheckItemId(item.id);
     });
   };
-
-  useEffect(() => {
-    if (pollData.id === id) {
-      setPoll(pollData);
-    }
-  }, [pollData]);
 
   const onDeletePoll = () => {
     dispatch(deletePoll(id));
