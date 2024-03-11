@@ -1,18 +1,19 @@
 import { Close } from "@mui/icons-material";
 import {
-    Box,
-    Card,
-    CardContent,
-    CardHeader,
-    Divider,
-    IconButton,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import CustomAvatar from "../components/CustomAvatar";
+import LoadingContent from "../components/LoadingContent";
 import { User } from "../models/UserModel";
 import { useAppDispatch } from "../redux/hook";
 import { getVoters } from "../services/PollService";
@@ -52,7 +53,7 @@ const VotersModal = ({
         height: "100vh",
       }}
     >
-      <Card>
+      <Card sx={{ minWidth: "16rem" }}>
         <CardHeader
           action={
             <IconButton onClick={() => setIsOpen(false)}>
@@ -62,9 +63,14 @@ const VotersModal = ({
           title="Peoples"
         />
         <Divider />
-        <CardContent sx={{ padding: "0" }}>
+        <CardContent sx={{ padding: "0", position: "relative" }}>
           <List
-            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            sx={{
+              width: "100%",
+              height: "16rem",
+              bgcolor: "background.paper",
+              overflowY: "auto",
+            }}
           >
             {voters.map((user) => (
               <ListItem key={user.id}>
@@ -75,6 +81,7 @@ const VotersModal = ({
               </ListItem>
             ))}
           </List>
+          {isLoading && <LoadingContent />}
         </CardContent>
       </Card>
     </Box>
