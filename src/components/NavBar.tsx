@@ -6,10 +6,10 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser, toggleSideBar } from "../redux/reducers/AuthSlice";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
 
 const NavBar = () => {
   const theme = useTheme();
@@ -36,7 +36,7 @@ const NavBar = () => {
         <FlexBetween
           sx={{
             borderRadius: "1rem",
-            minWidth: "20rem",
+            maxWidth: "20rem",
             padding: "0rem 1rem",
             backgroundColor: theme.palette.background.default,
           }}
