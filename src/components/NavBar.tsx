@@ -20,7 +20,7 @@ const NavBar = () => {
     <Box
       sx={{ width: "100%", backgroundColor: theme.palette.background.paper }}
     >
-      <FlexBetween sx={{ padding: "0.1rem 0.5rem" }}>
+      <FlexBetween sx={{ padding: "0.1rem 0.5rem", gap:"1rem"}}>
         <FlexBetween sx={{ gap: "1rem" }}>
           <IconButton onClick={() => dispatch(toggleSideBar())}>
             <Menu />
@@ -36,7 +36,8 @@ const NavBar = () => {
         <FlexBetween
           sx={{
             borderRadius: "1rem",
-            maxWidth: "20rem",
+            maxWidth: "25rem",
+            width: "100%",
             padding: "0rem 1rem",
             backgroundColor: theme.palette.background.default,
           }}

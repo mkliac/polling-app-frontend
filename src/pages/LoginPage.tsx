@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hook";
 const LoginForm = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const dispatch = useAppDispatch();
-  console.log(isLoggedIn);
+
   const getUser = () => {
     UserService.login()
       .then((data) => {
@@ -26,7 +26,6 @@ const LoginForm = () => {
   };
 
   const onSuccess = (res) => {
-    console.log(res);
     TokenService.saveToken(res.credential);
     getUser();
   };

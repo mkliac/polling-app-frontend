@@ -18,7 +18,6 @@ const PollsWidget = () => {
     dispatch(getPolls());
   }, []);
 
-  console.log(polls);
   return (
     <>
       {status === APIStatus.SUCCESS && polls.map((poll) => (

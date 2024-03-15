@@ -18,8 +18,8 @@ const HomePage = () => {
         sx={{
           width: "100%",
           display: "flex",
-          padding: "0.2rem 6%",
-          gap: "0.5rem",
+          padding: "0",
+          gap: "0.25rem",
           justifyContent: "center",
         }}
       >

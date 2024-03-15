@@ -12,7 +12,7 @@ const initialState: GlobalState = {
   mode: "light",
   user: null,
   isLoggedIn: false,
-  isSideBarExtend: true,
+  isSideBarExtend: false,
 };
 
 export const authSlice = createSlice({
