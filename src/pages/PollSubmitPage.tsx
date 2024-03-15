@@ -10,14 +10,21 @@ import {
   List,
   ListItem,
   Modal,
+  Step,
+  StepLabel,
+  Stepper,
   Switch,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import CustomTextField from "../components/CustomTextField";
-import LoadingOverlay from "../components/LoadingOverlay";
+import FlexBetween from "../components/FlexBwtween";
+import LoadingContent from "../components/LoadingContent";
 import { Poll, SavePollRequest } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
@@ -42,13 +49,42 @@ const PollSubmitForm = () => {
   });
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const steps = ["Descriptions", "Poll Items", "Poll Settings"];
   const poll: Poll = useAppSelector(selectPoll);
   const status = useAppSelector(selectSubmitStatus);
   const [id, setId] = useState("");
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const matches = useMediaQuery("(min-width:650px)");
+
+  const stepBack = () => {
+    setActiveStep((prev) => (prev === 0 ? 0 : prev - 1));
+  };
+  const stepNext = () => {
+    setActiveStep((prev) =>
+      prev === steps.length - 1 ? steps.length - 1 : prev + 1
+    );
+  };
 
   const setTitle = (newTitle: string) => {
     setRequest({ ...request, title: newTitle });
+  };
+
+  const setDescription = (newDescription: string) => {
+    setRequest({ ...request, description: newDescription });
+  };
+
+  const setClosedDate = (newDate: Date) => {
+    setRequest({ ...request, closedDate: newDate });
+  };
+
+  const setPrivate = (isPrivate: boolean) => {
+    setRequest({ ...request, isPrivate: isPrivate });
+  };
+
+  const setAnonymous = (isAnonymous: boolean) => {
+    setRequest({ ...request, isAnonymous: isAnonymous });
   };
 
   const removeItem = (index) => {
@@ -74,151 +110,223 @@ const PollSubmitForm = () => {
     if (status === APIStatus.SUCCESS) {
       setId(poll.id);
       setOpen(true);
+      setIsLoading(false);
       dispatch(resetSubmitStatus());
+    } else if (status === APIStatus.LOADING) {
+      setIsLoading(true);
     }
   }, [status]);
 
   return (
     <Box
+      width="100%"
+      height="100vh"
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-around"
+      alignItems="center"
       sx={{
-        minHeight: "100vh",
-        alignItems: "center",
-        justifyContent: "center",
-        display: "flex",
+        backgroundColor: theme.palette.background.default,
       }}
     >
-      <LoadingOverlay isLoading={isLoading} />
-      <Card sx={{ padding: "20px 5px", margin: "0 auto" }}>
-        <Typography variant="h3">Create Poll</Typography>
-        <CardContent
+      <Stepper
+        activeStep={activeStep}
+        sx={{ padding: "0rem 1rem", width: "100%" }}
+      >
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      <Box width={matches ? "40rem" : "98%"} minWidth="20rem">
+        <Card
           sx={{
-            maxWidth: "550px",
-            maxHeight: "80vh",
-            overflow: "auto",
-            scrollbarGutter: "stable",
+            padding: "1.5rem 0.3rem",
+            margin: "0 auto",
+            position: "relative",
           }}
         >
-          <Typography variant="h6" textAlign="left">
-            Title*
-          </Typography>
-          <CustomTextField
-            sx={{ marginBottom: "12px" }}
-            fullWidth
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            error={!isTextValid(request.title)}
-            helperText={getErrorMsg(request.title)}
-          />
-          <Typography variant="h6" textAlign="left">
-            Description
-          </Typography>
-          <CustomTextField
-            fullWidth
-            multiline
-            rows={3}
-            placeholder="(Optional)"
-            onChange={(e) => {
-              request.description = e.target.value;
-            }}
-          />
-          <Box margin="8px 0px">
-            <Typography textAlign="left" variant="h6">
-              Options
-            </Typography>
-            <Divider />
-            <List
-              sx={{
-                position: "relative",
-                width: "100%",
-                height: "200px",
-                overflow: "auto",
-                scrollbarGutter: "stable",
-              }}
-            >
-              {items.map((item, idx) => (
-                <ListItem
-                  key={idx}
-                  sx={{ margin: "4px 0px" }}
-                  secondaryAction={
-                    <IconButton
-                      onClick={() => {
-                        removeItem(idx);
-                      }}
-                    >
-                      <Delete fontSize="inherit" />
-                    </IconButton>
-                  }
-                >
-                  <CustomTextField
-                    sx={{ marginRight: "12px" }}
-                    value={item}
-                    fullWidth
-                    onChange={(e) => {
-                      changeItem(e.target.value, idx);
-                    }}
-                    error={!isTextValid(item, 1)}
-                    helperText={getErrorMsg(item, 1)}
-                  />
-                </ListItem>
-              ))}
-              {items.length < 10 && (
-                <IconButton
-                  onClick={() => {
-                    addItem("");
-                  }}
-                >
-                  <Add />
-                </IconButton>
-              )}
-            </List>
-            <Divider />
-          </Box>
-          <Box
+          {isLoading && <LoadingContent />}
+          <Typography variant="h3">{steps[activeStep]}</Typography>
+          <CardContent
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              margin: "6px 0px",
+              width: "100%",
+              height: "70vh",
+              overflow: "auto",
+              scrollbarGutter: "stable",
             }}
           >
-            <FormControlLabel
-              control={
-                <Switch
+            {activeStep === 0 ? (
+              <>
+                <Typography variant="h6" textAlign="left">
+                  Title*
+                </Typography>
+                <CustomTextField
+                  value={request.title}
+                  fullWidth
                   onChange={(e) => {
-                    request.isPrivate = e.target.checked;
+                    setTitle(e.target.value);
+                  }}
+                  error={!isTextValid(request.title)}
+                  helperText={getErrorMsg(request.title)}
+                />
+                <Typography variant="h6" textAlign="left" marginTop="3rem">
+                  Description
+                </Typography>
+                <CustomTextField
+                  value={request.description}
+                  fullWidth
+                  multiline
+                  rows={10}
+                  placeholder="(Optional)"
+                  onChange={(e) => {
+                    setDescription(e.target.value);
                   }}
                 />
-              }
-              label="Private"
-            />
-            <FormControlLabel
-              control={
-                <Switch
-                  onChange={(e) => {
-                    request.isAnonymous = e.target.checked;
+              </>
+            ) : activeStep == 1 ? (
+              <>
+                <Typography textAlign="left" variant="h6">
+                  Options
+                </Typography>
+                <Divider />
+                <List
+                  sx={{
+                    position: "relative",
+                    width: "100%",
+                    height: "85%",
+                    overflow: "auto",
+                    scrollbarGutter: "stable",
                   }}
-                />
-              }
-              label="Anonymous"
-            />
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                onChange={(e) => {
-                  request.closedDate = new Date(e.toLocaleString());
-                }}
-              />
-            </LocalizationProvider>
+                >
+                  {items.map((item, idx) => (
+                    <ListItem
+                      key={idx}
+                      sx={{ margin: "0.25rem 0" }}
+                      secondaryAction={
+                        <IconButton
+                          onClick={() => {
+                            removeItem(idx);
+                          }}
+                        >
+                          <Delete fontSize="inherit" />
+                        </IconButton>
+                      }
+                    >
+                      <CustomTextField
+                        sx={{ marginRight: "0.75rem" }}
+                        value={item}
+                        fullWidth
+                        onChange={(e) => {
+                          changeItem(e.target.value, idx);
+                        }}
+                        error={!isTextValid(item, 1)}
+                        helperText={getErrorMsg(item, 1)}
+                      />
+                    </ListItem>
+                  ))}
+                  {items.length < 10 && (
+                    <IconButton
+                      onClick={() => {
+                        addItem("");
+                      }}
+                    >
+                      <Add />
+                    </IconButton>
+                  )}
+                </List>
+                <Divider />
+              </>
+            ) : (
+              <>
+                <Box
+                  display="flex"
+                  justifyContent="left"
+                  flexDirection="column"
+                  gap="1.5rem"
+                >
+                  <Typography variant="h6" textAlign="left" marginTop="3rem">
+                    Accessibility
+                  </Typography>
+                  <Box
+                    display="flex"
+                    justifyContent="left"
+                    flexDirection="column"
+                    gap="0.5rem"
+                    padding="0rem 2rem"
+                  >
+                    <FormControlLabel
+                      checked={request.isPrivate}
+                      control={
+                        <Switch
+                          onChange={(e) => {
+                            setPrivate(e.target.checked);
+                          }}
+                        />
+                      }
+                      label="Private"
+                    />
+                    <FormControlLabel
+                      checked={request.isAnonymous}
+                      control={
+                        <Switch
+                          onChange={(e) => {
+                            setAnonymous(e.target.checked);
+                          }}
+                        />
+                      }
+                      label="Anonymous"
+                    />
+                  </Box>
+                  <Typography variant="h6" textAlign="left" marginTop="3rem">
+                    Expiry Date
+                  </Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      value={
+                        request.closedDate == undefined
+                          ? null
+                          : dayjs(request.closedDate)
+                      }
+                      onChange={(e) => {
+                        setClosedDate(new Date(e.toLocaleString()));
+                      }}
+                    />
+                  </LocalizationProvider>
+                </Box>
+              </>
+            )}
+          </CardContent>
+          <FlexBetween>
+            <Button
+              onClick={() => {
+                stepBack();
+              }}
+              disabled={activeStep === 0}
+              color="inherit"
+            >
+              Back
+            </Button>
+            <Button
+              onClick={() => {
+                if (activeStep === steps.length - 1) {
+                  submitRequest(request);
+                } else {
+                  stepNext();
+                }
+              }}
+            >
+              {activeStep === steps.length - 1 ? "Submit" : "Next"}
+            </Button>
+          </FlexBetween>
+        </Card>
+        <Modal open={open}>
+          <Box>
+            <PollShareModal id={id} />
           </Box>
-          <Button variant="contained" onClick={() => submitRequest(request)}>
-            Create
-          </Button>
-        </CardContent>
-      </Card>
-      <Modal open={open}>
-        <Box>
-          <PollShareModal id={id} />
-        </Box>
-      </Modal>
+        </Modal>
+      </Box>
     </Box>
   );
 };
