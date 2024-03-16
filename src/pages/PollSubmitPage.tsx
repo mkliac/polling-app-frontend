@@ -27,6 +27,7 @@ import FlexBetween from "../components/FlexBwtween";
 import LoadingContent from "../components/LoadingContent";
 import { Poll, SavePollRequest } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { selectAppConfig } from "../redux/reducers/ConfigSlice";
 import {
   resetSubmitStatus,
   selectPoll,
@@ -57,6 +58,7 @@ const PollSubmitForm = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const matches = useMediaQuery("(min-width:650px)");
+  const pollConfig = useAppSelector(selectAppConfig).pollConfig;
 
   const stepBack = () => {
     setActiveStep((prev) => (prev === 0 ? 0 : prev - 1));
@@ -168,8 +170,19 @@ const PollSubmitForm = () => {
                   onChange={(e) => {
                     setTitle(e.target.value);
                   }}
-                  error={!isTextValid(request.title)}
-                  helperText={getErrorMsg(request.title)}
+                  inputProps={{ maxLength: pollConfig.maxTitleLength }}
+                  error={
+                    !isTextValid(
+                      request.title,
+                      pollConfig.minTitleLength,
+                      pollConfig.maxTitleLength
+                    )
+                  }
+                  helperText={getErrorMsg(
+                    request.title,
+                    pollConfig.minTitleLength,
+                    pollConfig.maxTitleLength
+                  )}
                 />
                 <Typography variant="h6" textAlign="left" marginTop="3rem">
                   Description
@@ -183,6 +196,19 @@ const PollSubmitForm = () => {
                   onChange={(e) => {
                     setDescription(e.target.value);
                   }}
+                  inputProps={{ maxLength: pollConfig.maxTitleLength }}
+                  error={
+                    !isTextValid(
+                      request.description,
+                      0,
+                      pollConfig.maxDescriptionLength
+                    )
+                  }
+                  helperText={getErrorMsg(
+                    request.description,
+                    0,
+                    pollConfig.maxDescriptionLength
+                  )}
                 />
               </>
             ) : activeStep == 1 ? (
@@ -221,12 +247,19 @@ const PollSubmitForm = () => {
                         onChange={(e) => {
                           changeItem(e.target.value, idx);
                         }}
-                        error={!isTextValid(item, 1)}
-                        helperText={getErrorMsg(item, 1)}
+                        inputProps={{ maxLength: pollConfig.maxItemTextLength }}
+                        error={
+                          !isTextValid(item, 1, pollConfig.maxItemTextLength)
+                        }
+                        helperText={getErrorMsg(
+                          item,
+                          1,
+                          pollConfig.maxItemTextLength
+                        )}
                       />
                     </ListItem>
                   ))}
-                  {items.length < 10 && (
+                  {items.length < pollConfig.maxPollItems && (
                     <IconButton
                       onClick={() => {
                         addItem("");

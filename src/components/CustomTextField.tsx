@@ -1,7 +1,7 @@
 import { TextField, TextFieldProps, styled } from "@mui/material";
 
 const StyleTextField = styled(TextField)({
-  "& .MuiFormHelperText-root.Mui-error": {
+  "& .MuiFormHelperText-root": {
     position: "absolute",
     top: "100%",
   },

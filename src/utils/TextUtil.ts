@@ -1,6 +1,10 @@
-const defaultMinLength = 5;
+const defaultMinLength = 0;
 
-export const getErrorMsg = (text: string, minLength?: number) => {
+export const getErrorMsg = (
+  text: string,
+  minLength?: number,
+  maxLength?: number
+) => {
   if (minLength === undefined) {
     minLength = defaultMinLength;
   }
@@ -11,14 +15,24 @@ export const getErrorMsg = (text: string, minLength?: number) => {
   if (diff > 0) {
     return `Required ${diff} more character${diff > 1 ? "s" : ""}`;
   }
+  if (maxLength !== undefined) {
+    return `${text.length}/${maxLength}`;
+  }
   return "";
 };
 
-export const isTextValid = (text: string, minLength?: number) => {
+export const isTextValid = (
+  text: string,
+  minLength?: number,
+  maxLength?: number
+) => {
   if (minLength === undefined) {
     minLength = defaultMinLength;
   }
-  return text.length >= minLength;
+  return (
+    text.length >= minLength &&
+    (maxLength === undefined || text.length <= maxLength)
+  );
 };
 
 export const toAvatarText = (text: string) => {

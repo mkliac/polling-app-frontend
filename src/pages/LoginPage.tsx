@@ -2,10 +2,15 @@ import { Box, Card, CardContent, Typography } from "@mui/material";
 import { GoogleLogin } from "@react-oauth/google";
 import { useLayoutEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { selectIsLoggedIn, setLogin, setLogout } from "../redux/reducers/AuthSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import {
+  selectIsLoggedIn,
+  setLogin,
+  setLogout,
+} from "../redux/reducers/AuthSlice";
+import { cacheAppConfig } from "../services/AppConfigService";
 import TokenService from "../services/TokenService";
 import UserService from "../services/UserService";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
 
 const LoginForm = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
@@ -28,6 +33,7 @@ const LoginForm = () => {
   const onSuccess = (res) => {
     TokenService.saveToken(res.credential);
     getUser();
+    dispatch(cacheAppConfig());
   };
 
   useLayoutEffect(() => {
@@ -60,9 +66,7 @@ const LoginForm = () => {
               onError={onError}
             />
           ) : (
-            <Navigate
-              to={sessionStorage.getItem("redirect") || "/home"}
-            />
+            <Navigate to={sessionStorage.getItem("redirect") || "/home"} />
           )}
         </CardContent>
       </Card>
