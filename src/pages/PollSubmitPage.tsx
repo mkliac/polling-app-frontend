@@ -23,6 +23,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import CustomTextField from "../components/CustomTextField";
+import ErrorSnackbar from "../components/ErrorSnackbar";
 import FlexBetween from "../components/FlexBwtween";
 import LoadingContent from "../components/LoadingContent";
 import { Poll, SavePollRequest } from "../models/PollModels";
@@ -49,7 +50,7 @@ const PollSubmitForm = () => {
     closedDate: undefined,
   });
   const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showError, setShowError] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Descriptions", "Poll Items", "Poll Settings"];
   const poll: Poll = useAppSelector(selectPoll);
@@ -112,12 +113,21 @@ const PollSubmitForm = () => {
     if (status === APIStatus.SUCCESS) {
       setId(poll.id);
       setOpen(true);
-      setIsLoading(false);
       dispatch(resetSubmitStatus());
-    } else if (status === APIStatus.LOADING) {
-      setIsLoading(true);
+    } else if (status === APIStatus.ERROR) {
+      setShowError(true);
     }
   }, [status]);
+
+  const handleCloseError = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowError(false);
+  };
 
   return (
     <Box
@@ -131,6 +141,11 @@ const PollSubmitForm = () => {
         backgroundColor: theme.palette.background.default,
       }}
     >
+      <ErrorSnackbar
+        isTriggered={showError}
+        onClose={handleCloseError}
+        message="Fail to submit poll"
+      />
       <Stepper
         activeStep={activeStep}
         sx={{ padding: "0rem 1rem", width: "100%" }}
@@ -149,7 +164,7 @@ const PollSubmitForm = () => {
             position: "relative",
           }}
         >
-          {isLoading && <LoadingContent />}
+          {status === APIStatus.LOADING && <LoadingContent />}
           <Typography variant="h3">{steps[activeStep]}</Typography>
           <CardContent
             sx={{
@@ -196,7 +211,7 @@ const PollSubmitForm = () => {
                   onChange={(e) => {
                     setDescription(e.target.value);
                   }}
-                  inputProps={{ maxLength: pollConfig.maxTitleLength }}
+                  inputProps={{ maxLength: pollConfig.maxDescriptionLength }}
                   error={
                     !isTextValid(
                       request.description,
