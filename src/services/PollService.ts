@@ -23,7 +23,7 @@ export const getPoll = createAsyncThunk<
     };
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to fetch poll with id=${id}`,
+      message: error.response.data.message,
     });
   }
 
@@ -44,7 +44,7 @@ export const getPolls = createAsyncThunk<
       };
     });
   } catch (error) {
-    return thunkAPI.rejectWithValue({ message: "Failed to fetch polls" });
+    return thunkAPI.rejectWithValue({ message: error.response.data.message });
   }
 
   return data;
@@ -62,7 +62,8 @@ export const savePoll = createAsyncThunk<
       ...poll,
     };
   } catch (error) {
-    return thunkAPI.rejectWithValue({ message: "Failed to save poll" });
+    console.log(error);
+    return thunkAPI.rejectWithValue({ message: error.response.data.message });
   }
 
   return data;
@@ -77,7 +78,7 @@ export const deletePoll = createAsyncThunk<
     await deleteApi(POLL_URI + `/${id}`);
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to delete poll with id=${id}`,
+      message: error.response.data.message,
     });
   }
 });
@@ -95,7 +96,7 @@ export const addPollItems = createAsyncThunk<
     };
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to add poll items to poll with id=${id}`,
+      message: error.response.data.message,
     });
   }
 
@@ -115,7 +116,7 @@ export const deletePollItems = createAsyncThunk<
     };
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to delete poll items from poll with id=${id}`,
+      message: error.response.data.message,
     });
   }
 
@@ -137,7 +138,7 @@ export const updatePollItem = createAsyncThunk<
     };
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to update poll item with id=${itemId}`,
+      message: error.response.data.message,
     });
   }
 
@@ -156,7 +157,7 @@ export const vote = createAsyncThunk<
       ...poll,
     };
   } catch (error) {
-    return thunkAPI.rejectWithValue({ message: "Failed to vote" });
+    return thunkAPI.rejectWithValue({ message: error.response.data.message });
   }
 
   return data;
@@ -175,7 +176,7 @@ export const closePoll = createAsyncThunk<
     };
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to close poll with id=${id}`,
+      message: error.response.data.message,
     });
   }
 
@@ -197,7 +198,7 @@ export const getVoters = createAsyncThunk<
     });
   } catch (error) {
     return thunkAPI.rejectWithValue({
-      message: `Failed to get voters for item with id=${itemId}`,
+      message: error.response.data.message,
     });
   }
 
