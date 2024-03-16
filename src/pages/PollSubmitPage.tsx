@@ -32,6 +32,7 @@ import { selectAppConfig } from "../redux/reducers/ConfigSlice";
 import {
   resetSubmitStatus,
   selectPoll,
+  selectPollError,
   selectSubmitStatus,
 } from "../redux/reducers/PollSlice";
 import { savePoll } from "../services/PollService";
@@ -55,6 +56,7 @@ const PollSubmitForm = () => {
   const steps = ["Descriptions", "Poll Items", "Poll Settings"];
   const poll: Poll = useAppSelector(selectPoll);
   const status = useAppSelector(selectSubmitStatus);
+  const error = useAppSelector(selectPollError);
   const [id, setId] = useState("");
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -144,7 +146,7 @@ const PollSubmitForm = () => {
       <ErrorSnackbar
         isTriggered={showError}
         onClose={handleCloseError}
-        message="Fail to submit poll"
+        message={error}
       />
       <Stepper
         activeStep={activeStep}
