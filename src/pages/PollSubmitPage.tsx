@@ -35,7 +35,7 @@ import {
 } from "../redux/reducers/PollSlice";
 import { savePoll } from "../services/PollService";
 import { APIStatus } from "../types/ApiStatusType";
-import { getErrorMsg, isTextValid } from "../utils/TextUtil";
+import { getHelperText, isTextValid } from "../utils/TextUtil";
 import PollShareModal from "./PollShareModal";
 
 const PollSubmitForm = () => {
@@ -178,7 +178,7 @@ const PollSubmitForm = () => {
                       pollConfig.maxTitleLength
                     )
                   }
-                  helperText={getErrorMsg(
+                  helperText={getHelperText(
                     request.title,
                     pollConfig.minTitleLength,
                     pollConfig.maxTitleLength
@@ -204,7 +204,7 @@ const PollSubmitForm = () => {
                       pollConfig.maxDescriptionLength
                     )
                   }
-                  helperText={getErrorMsg(
+                  helperText={getHelperText(
                     request.description,
                     0,
                     pollConfig.maxDescriptionLength
@@ -251,7 +251,7 @@ const PollSubmitForm = () => {
                         error={
                           !isTextValid(item, 1, pollConfig.maxItemTextLength)
                         }
-                        helperText={getErrorMsg(
+                        helperText={getHelperText(
                           item,
                           1,
                           pollConfig.maxItemTextLength

@@ -1,6 +1,6 @@
 const defaultMinLength = 0;
 
-export const getErrorMsg = (
+export const getHelperText = (
   text: string,
   minLength?: number,
   maxLength?: number
