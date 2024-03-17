@@ -6,11 +6,14 @@ import { vote } from "../services/PollService";
 import LoadingContent from "./LoadingContent";
 import PollItemsButton from "./PollItemsButton";
 import WidgetWrapper from "./WidgetWrapper";
+import ErrorSnackbar from "./ErrorSnackbar";
 
 const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
   const [poll, setPoll] = useState<Poll>(initPoll);
   const [checkItemId, setCheckItemId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isError, setIsError] = useState(false);
   const dispatch = useAppDispatch();
 
   const onVote = (item: PollItem) => {
@@ -22,7 +25,8 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
         setCheckItemId(item.id);
       })
       .catch((err) => {
-        console.log(err);
+        setErrorMsg(err.message);
+        setIsError(true);
       })
       .finally(() => {
         setIsLoading(false);
@@ -41,6 +45,11 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
       <br />
       <PollItemsButton poll={poll} onVote={onVote} checkItemId={checkItemId} />
       {isLoading && <LoadingContent />}
+      <ErrorSnackbar
+        isTriggered={isError}
+        setOpen={setIsError}
+        message={errorMsg}
+      />
     </WidgetWrapper>
   );
 };

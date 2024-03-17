@@ -121,16 +121,6 @@ const PollSubmitForm = () => {
     }
   }, [status]);
 
-  const handleCloseError = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setShowError(false);
-  };
-
   return (
     <Box
       width="100%"
@@ -145,7 +135,7 @@ const PollSubmitForm = () => {
     >
       <ErrorSnackbar
         isTriggered={showError}
-        onClose={handleCloseError}
+        setOpen={setShowError}
         message={error}
       />
       <Stepper

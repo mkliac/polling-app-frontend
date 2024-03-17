@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectSideBar, toggleSideBar } from "../redux/reducers/AuthSlice";
+import { selectSideBar, toggleSideBar } from "../redux/reducers/ConfigSlice";
 
 const MenuBar = () => {
   const theme = useTheme();

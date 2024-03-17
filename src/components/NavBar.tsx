@@ -7,7 +7,8 @@ import {
   useTheme,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectUser, toggleSideBar } from "../redux/reducers/AuthSlice";
+import { selectUser } from "../redux/reducers/AuthSlice";
+import { toggleSideBar } from "../redux/reducers/ConfigSlice";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
 
@@ -20,7 +21,7 @@ const NavBar = () => {
     <Box
       sx={{ width: "100%", backgroundColor: theme.palette.background.paper }}
     >
-      <FlexBetween sx={{ padding: "0.1rem 0.5rem", gap:"1rem"}}>
+      <FlexBetween sx={{ padding: "0.1rem 0.5rem", gap: "1rem" }}>
         <FlexBetween sx={{ gap: "1rem" }}>
           <IconButton onClick={() => dispatch(toggleSideBar())}>
             <Menu />
@@ -42,7 +43,7 @@ const NavBar = () => {
             backgroundColor: theme.palette.background.default,
           }}
         >
-          <InputBase placeholder="Search..." fullWidth/>
+          <InputBase placeholder="Search..." fullWidth />
           <IconButton>
             <Search />
           </IconButton>
