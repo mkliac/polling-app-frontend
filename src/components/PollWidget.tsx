@@ -29,6 +29,7 @@ import PollItemsButton from "./PollItemsButton";
 import PollShareModal from "../pages/PollShareModal";
 import { selectUser } from "../redux/reducers/AuthSlice";
 import { removePollInState } from "../redux/reducers/PollSlice";
+import TimeSlider from "./TimeSlider";
 
 const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
   const [poll, setPoll] = useState<Poll>(initPoll);
@@ -142,6 +143,12 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
         <Typography paragraph sx={{ mt: "0.5rem", textAlign: "left" }}>
           {poll.description}
         </Typography>
+        {poll.closedDate && (
+          <TimeSlider
+            date1={new Date(poll.createdAt)}
+            date2={new Date(poll.closedDate)}
+          />
+        )}
         <Divider />
         <br />
         <PollItemsButton
