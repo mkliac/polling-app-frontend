@@ -2,16 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import { Poll } from "../../models/PollModels";
 import {
-    addPollItems,
-    closePoll,
-    deletePoll,
-    deletePollItems,
-    getPoll,
-    getPolls,
-    getVoters,
-    savePoll,
-    updatePollItem,
-    vote,
+  addPollItems,
+  closePoll,
+  deletePoll,
+  deletePollItems,
+  getPoll,
+  getPolls,
+  getVoters,
+  savePoll,
+  updatePollItem,
+  vote,
 } from "../../services/PollService";
 import { APIStatus, APIStatusType } from "../../types/ApiStatusType";
 
@@ -38,6 +38,9 @@ export const pollDataSlice = createSlice({
     resetSubmitStatus: (state) => {
       console.log("resetSubmitStatus");
       state.submitStatus = APIStatus.IDLE;
+    },
+    removePollInState: (state, action) => {
+      state.polls = state.polls.filter((poll) => poll.id !== action.payload);
     },
   },
 
@@ -133,5 +136,5 @@ export const selectPoll = (state: RootState) => state.poll.poll;
 export const selectPollStatus = (state: RootState) => state.poll.getPollsStatus;
 export const selectSubmitStatus = (state: RootState) => state.poll.submitStatus;
 export const selectPollError = (state: RootState) => state.poll.error;
-export const { resetSubmitStatus } = pollDataSlice.actions;
+export const { resetSubmitStatus, removePollInState } = pollDataSlice.actions;
 export default pollDataSlice.reducer;

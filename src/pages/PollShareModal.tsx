@@ -1,4 +1,8 @@
-import { CheckCircleOutline, ContentCopy, Done } from "@mui/icons-material";
+import {
+  ContentCopy,
+  Done,
+  Share
+} from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -23,10 +27,10 @@ const PollShareModal = ({ id }) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
+        position: "absolute" as "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
       }}
     >
       <Card>
@@ -47,9 +51,9 @@ const PollShareModal = ({ id }) => {
               textAlign="center"
               color={"lightgreen"}
             >
-              Success
+              SHARE
             </Typography>
-            <CheckCircleOutline
+            <Share
               sx={{ height: "48px", width: "48px", color: "lightgreen" }}
             />
           </Box>

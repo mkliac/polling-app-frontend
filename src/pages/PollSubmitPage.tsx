@@ -121,6 +121,10 @@ const PollSubmitForm = () => {
     }
   }, [status]);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
   return (
     <Box
       width="100%"
@@ -350,18 +354,24 @@ const PollSubmitForm = () => {
             </Button>
             <Button
               onClick={() => {
-                if (activeStep === steps.length - 1) {
+                if (activeStep !== steps.length - 1) {
+                  stepNext();
+                } else if (id === "") {
                   submitRequest(request);
                 } else {
-                  stepNext();
+                  setOpen(true);
                 }
               }}
             >
-              {activeStep === steps.length - 1 ? "Submit" : "Next"}
+              {activeStep !== steps.length - 1
+                ? "Next"
+                : id === ""
+                ? "Submit"
+                : "Share"}
             </Button>
           </FlexBetween>
         </Card>
-        <Modal open={open}>
+        <Modal open={open} onClose={handleClose}>
           <Box>
             <PollShareModal id={id} />
           </Box>

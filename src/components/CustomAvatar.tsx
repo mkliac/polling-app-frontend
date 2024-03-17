@@ -1,7 +1,7 @@
 import { Avatar } from "@mui/material";
 import { toAvatarText } from "../utils/TextUtil";
 
-const CustomAvatar = ({ name }: { name: string }) => {
+const CustomAvatar = ({name}: {name?: string}) => {
   return (
     <Avatar
       sx={{

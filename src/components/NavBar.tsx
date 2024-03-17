@@ -17,7 +17,7 @@ const NavBar = () => {
   const theme = useTheme();
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
-  const matches = useMediaQuery("(min-width:700px)");
+  const matches = useMediaQuery("(min-width:750px)");
 
   return (
     <Box

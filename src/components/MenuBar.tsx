@@ -18,7 +18,7 @@ const MenuBar = () => {
   const isExtend = useAppSelector(selectSideBar);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const matches = useMediaQuery("(min-width:800px)");
+  const matches = useMediaQuery("(min-width:750px)");
   const list = (
     <List>
       <ListItem
