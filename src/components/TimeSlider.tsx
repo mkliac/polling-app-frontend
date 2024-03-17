@@ -10,7 +10,7 @@ const TimeSlider = ({ date1, date2 }: { date1: Date; date2: Date }) => {
   const percent = progress / total;
 
   return (
-    <Box margin="0 1rem">
+    <Box margin="0">
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography display="flex" alignItems="center">
           <Flag />
@@ -21,15 +21,19 @@ const TimeSlider = ({ date1, date2 }: { date1: Date; date2: Date }) => {
           {date2.toLocaleDateString("en-US")}
         </Typography>
       </Box>
-      <Slider
-        size="small"
-        min={0}
-        max={1}
-        value={percent}
-        valueLabelDisplay="auto"
-        valueLabelFormat={() => today.toLocaleDateString("en-US")}
-        sx={{ color: `rgb(${255 * percent}, ${255 * (1 - percent)}, 0)` }}
-      />
+      <Box padding="0 2rem">
+        <Slider
+          size="small"
+          min={0}
+          max={1}
+          value={percent}
+          valueLabelDisplay="auto"
+          valueLabelFormat={() => today.toLocaleDateString("en-US")}
+          sx={{
+            color: `rgb(${255 * percent}, ${255 * (1 - percent)}, 0)`,
+          }}
+        />
+      </Box>
     </Box>
   );
 };

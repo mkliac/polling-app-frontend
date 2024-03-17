@@ -137,7 +137,15 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
         }
       />
       <CardContent sx={{ margin: "0", paddingTop: "0" }}>
-        <Typography variant="h4" sx={{ mt: "1rem", textAlign: "left" }}>
+        <Typography
+          variant="h4"
+          sx={{
+            mt: "1rem",
+            textAlign: "left",
+            paddingTop: "0",
+            marginTop: "0",
+          }}
+        >
           {poll.title}
         </Typography>
         <Typography paragraph sx={{ mt: "0.5rem", textAlign: "left" }}>
@@ -149,8 +157,6 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
             date2={new Date(poll.closedDate)}
           />
         )}
-        <Divider />
-        <br />
         <PollItemsButton
           poll={poll}
           onVote={onVote}
