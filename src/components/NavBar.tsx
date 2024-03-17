@@ -4,6 +4,7 @@ import {
   IconButton,
   InputBase,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
@@ -16,6 +17,7 @@ const NavBar = () => {
   const theme = useTheme();
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const matches = useMediaQuery("(min-width:700px)");
 
   return (
     <Box
@@ -31,7 +33,7 @@ const NavBar = () => {
             fontSize="clamp(1rem, 2rem, 2.25rem)"
             color="primary"
           >
-            Voting
+            {matches ? "Polling" : "P"}
           </Typography>
         </FlexBetween>
         <FlexBetween
@@ -50,7 +52,9 @@ const NavBar = () => {
         </FlexBetween>
         <FlexBetween sx={{ gap: "0.5rem" }}>
           <CustomAvatar name={user.username} />
-          <Typography variant="h4">{user.username}</Typography>
+          {matches ? (
+            <Typography variant="h4">{user.username}</Typography>
+          ) : null}
         </FlexBetween>
       </FlexBetween>
     </Box>

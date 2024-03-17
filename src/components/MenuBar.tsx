@@ -21,19 +21,43 @@ const MenuBar = () => {
   const matches = useMediaQuery("(min-width:800px)");
   const list = (
     <List>
-      <ListItem button sx={{ minHeight: "3rem" }}>
+      <ListItem
+        button
+        sx={{
+          minHeight: "3rem",
+          "&:hover": {
+            transition: "0.05s",
+          },
+        }}
+      >
         <ListItemIcon>
           <Window />
         </ListItemIcon>
         <ListItemText primary={isExtend ? "Public" : ""} />
       </ListItem>
-      <ListItem button sx={{ minHeight: "3rem" }}>
+      <ListItem
+        button
+        sx={{
+          minHeight: "3rem",
+          "&:hover": {
+            transition: "0.05s",
+          },
+        }}
+      >
         <ListItemIcon>
           <FolderOpen />
         </ListItemIcon>
         <ListItemText primary={isExtend ? "My Polls" : ""} />
       </ListItem>
-      <ListItem button sx={{ minHeight: "3rem" }}>
+      <ListItem
+        button
+        sx={{
+          minHeight: "3rem",
+          "&:hover": {
+            transition: "0.05s",
+          },
+        }}
+      >
         <ListItemIcon>
           <Bookmarks />
         </ListItemIcon>
@@ -41,7 +65,12 @@ const MenuBar = () => {
       </ListItem>
       <ListItem
         button
-        sx={{ minHeight: "3rem" }}
+        sx={{
+          minHeight: "3rem",
+          "&:hover": {
+            transition: "0.05s",
+          },
+        }}
         onClick={() => navigate("/create-poll")}
       >
         <ListItemIcon>
