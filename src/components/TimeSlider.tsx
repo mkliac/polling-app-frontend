@@ -26,7 +26,7 @@ const TimeSlider = ({ date1, date2 }: { date1: Date; date2: Date }) => {
           max={1}
           value={percent}
           valueLabelDisplay="auto"
-          valueLabelFormat={() => today.toLocaleDateString("en-US")}
+          valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
           sx={{
             color: `rgb(${255 * percent}, ${255 * (1 - percent)}, 0)`,
             margin: "0",
