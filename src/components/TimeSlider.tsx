@@ -10,18 +10,16 @@ const TimeSlider = ({ date1, date2 }: { date1: Date; date2: Date }) => {
   const percent = progress / total;
 
   return (
-    <Box margin="0">
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography display="flex" alignItems="center">
-          <Flag />
-          {date1.toLocaleDateString("en-US")}
-        </Typography>
-        <Typography display="flex" alignItems="center">
-          <SportsScore />
-          {date2.toLocaleDateString("en-US")}
-        </Typography>
-      </Box>
-      <Box padding="0 2rem">
+    <Box padding="0.2rem">
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "end",
+          gap: "0.25rem",
+        }}
+      >
+        <Flag />
         <Slider
           size="small"
           min={0}
@@ -31,8 +29,23 @@ const TimeSlider = ({ date1, date2 }: { date1: Date; date2: Date }) => {
           valueLabelFormat={() => today.toLocaleDateString("en-US")}
           sx={{
             color: `rgb(${255 * percent}, ${255 * (1 - percent)}, 0)`,
+            margin: "0",
+            padding: "0",
+            "& .MuiSlider-thumb": {
+              height: "0.5rem",
+              width: "0.5rem",
+            },
           }}
         />
+        <SportsScore />
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography display="flex" alignItems="center">
+          {date1.toLocaleDateString("en-US")}
+        </Typography>
+        <Typography display="flex" alignItems="center">
+          {date2.toLocaleDateString("en-US")}
+        </Typography>
       </Box>
     </Box>
   );
