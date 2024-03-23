@@ -7,9 +7,12 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useSearchParams } from "react-router-dom";
+import { PollFilter } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
 import { toggleSideBar } from "../redux/reducers/ConfigSlice";
+import { getPolls } from "../services/PollService";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
 
@@ -18,6 +21,16 @@ const NavBar = () => {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const matches = useMediaQuery("(min-width:750px)");
+  const [searchParams, setSearchParams] = useSearchParams({
+    filterType: PollFilter.ALL,
+    search: "",
+  });
+  const search = searchParams.get("search");
+  const filterType = searchParams.get("filterType") as PollFilter;
+
+  const onSearch = () => {
+    dispatch(getPolls({ search, filterType }));
+  };
 
   return (
     <Box
@@ -45,8 +58,21 @@ const NavBar = () => {
             backgroundColor: theme.palette.background.default,
           }}
         >
-          <InputBase placeholder="Search..." fullWidth />
-          <IconButton>
+          <InputBase
+            placeholder="Search..."
+            fullWidth
+            value={search || ""}
+            onChange={(e) =>
+              setSearchParams(
+                (prev) => {
+                  prev.set("search", e.target.value);
+                  return prev;
+                },
+                { replace: true }
+              )
+            }
+          />
+          <IconButton onClick={() => onSearch()}>
             <Search />
           </IconButton>
         </FlexBetween>

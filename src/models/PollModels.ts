@@ -34,3 +34,14 @@ export interface Poll {
   createdBy: User;
   closedDate: Date;
 }
+
+export enum PollFilter {
+  ALL = "ALL",
+  USER = "USER",
+  SAVED = "SAVED",
+}
+
+export type PollFitlerType =
+  | PollFilter.ALL
+  | PollFilter.USER
+  | PollFilter.SAVED;

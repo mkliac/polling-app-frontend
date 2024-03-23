@@ -28,6 +28,9 @@ export const configSlice = createSlice({
     toggleSideBar: (state) => {
       state.isSideBarExtended = !state.isSideBarExtended;
     },
+    setSideBar: (state, action) => {
+      state.isSideBarExtended = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(cacheAppConfig.fulfilled, (state, { payload }) => {
@@ -39,7 +42,7 @@ export const configSlice = createSlice({
   },
 });
 
-export const { toggleSideBar } = configSlice.actions;
+export const { toggleSideBar, setSideBar } = configSlice.actions;
 export const selectAppConfig = (state: RootState) => state.config.appConfig;
 export const selectSideBar = (state: RootState) =>
   state.config.isSideBarExtended;

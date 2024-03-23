@@ -9,9 +9,15 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { PollFilter, PollFitlerType } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectSideBar, toggleSideBar } from "../redux/reducers/ConfigSlice";
+import {
+  selectSideBar,
+  setSideBar,
+  toggleSideBar,
+} from "../redux/reducers/ConfigSlice";
+import { getPolls } from "../services/PollService";
 
 const MenuBar = () => {
   const theme = useTheme();
@@ -19,6 +25,21 @@ const MenuBar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const matches = useMediaQuery("(min-width:750px)");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const onSelect = (filterType: PollFitlerType) => {
+    setSearchParams(
+      (prev) => {
+        prev.set("filterType", filterType);
+        prev.set("search", "");
+        return prev;
+      },
+      { replace: true }
+    );
+
+    dispatch(getPolls({ filterType }));
+    dispatch(setSideBar(false));
+  };
   const list = (
     <List>
       <ListItem
@@ -29,6 +50,7 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
+        onClick={() => onSelect(PollFilter.ALL)}
       >
         <ListItemIcon>
           <Window />
@@ -43,6 +65,7 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
+        onClick={() => onSelect(PollFilter.USER)}
       >
         <ListItemIcon>
           <FolderOpen />
@@ -57,6 +80,7 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
+        onClick={() => onSelect(PollFilter.SAVED)}
       >
         <ListItemIcon>
           <Bookmarks />

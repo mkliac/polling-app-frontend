@@ -15,14 +15,13 @@ const PollsWidget = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getPolls());
+    dispatch(getPolls({}));
   }, []);
 
   return (
     <>
-      {status === APIStatus.SUCCESS && polls.map((poll) => (
-        <PollWidget initPoll={poll} key={poll.id} />
-      ))}
+      {status === APIStatus.SUCCESS &&
+        polls.map((poll) => <PollWidget initPoll={poll} key={poll.id} />)}
       {status === APIStatus.LOADING && <LoadingOverlay isLoading={true} />}
     </>
   );
