@@ -7,6 +7,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PollFilter } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
@@ -25,10 +26,19 @@ const NavBar = () => {
     filterType: PollFilter.ALL,
     search: "",
   });
-  const search = searchParams.get("search");
-  const filterType = searchParams.get("filterType") as PollFilter;
+  const [inputSearch, setInputSearch] = useState(searchParams.get("search") || "");
 
   const onSearch = () => {
+    setSearchParams(
+      (prev) => {
+        prev.set("search", inputSearch);
+        return prev;
+      },
+      { replace: true }
+    );
+    setInputSearch("");
+    const search = searchParams.get("search");
+    const filterType = searchParams.get("filterType") as PollFilter;
     dispatch(getPolls({ search, filterType }));
   };
 
@@ -61,16 +71,8 @@ const NavBar = () => {
           <InputBase
             placeholder="Search..."
             fullWidth
-            value={search || ""}
-            onChange={(e) =>
-              setSearchParams(
-                (prev) => {
-                  prev.set("search", e.target.value);
-                  return prev;
-                },
-                { replace: true }
-              )
-            }
+            value={inputSearch}
+            onChange={(e) => setInputSearch(e.target.value)}
           />
           <IconButton onClick={() => onSearch()}>
             <Search />

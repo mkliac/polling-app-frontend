@@ -95,7 +95,10 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
-        onClick={() => navigate("/create-poll")}
+        onClick={() => {
+          navigate("/create-poll");
+          dispatch(setSideBar(false));
+        }}
       >
         <ListItemIcon>
           <AddBox />

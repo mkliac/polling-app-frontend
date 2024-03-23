@@ -28,7 +28,9 @@ const TimeSlider = ({ date1, date2 }: { date1: Date; date2: Date }) => {
           valueLabelDisplay="auto"
           valueLabelFormat={(value) => `${Math.round(value * 100)}%`}
           sx={{
-            color: `rgb(${255 * percent}, ${255 * (1 - percent)}, 0)`,
+            color: `rgb(${255 * (percent < 0.5 ? percent / 0.5 : 1)}, ${
+              255 * (percent < 0.5 ? 1 : (1 - percent) / 0.5)
+            }, 0)`,
             margin: "0",
             padding: "0",
             "& .MuiSlider-thumb": {

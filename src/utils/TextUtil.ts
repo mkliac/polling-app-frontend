@@ -9,7 +9,7 @@ export const getHelperText = (
     minLength = defaultMinLength;
   }
   const diff = minLength - text.length;
-  if (diff === 1) {
+  if (text.length === 0 && minLength !== 0) {
     return "This field cannot be empty";
   }
   if (diff > 0) {

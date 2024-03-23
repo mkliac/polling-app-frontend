@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Poll } from "../models/PollModels";
+import { useSearchParams } from "react-router-dom";
+import { Poll, PollFitlerType } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
 import { selectPollStatus, selectPolls } from "../redux/reducers/PollSlice";
@@ -13,9 +14,12 @@ const PollsWidget = () => {
   const polls: Poll[] = useAppSelector(selectPolls);
   const status = useAppSelector(selectPollStatus);
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("search");
+  const filterType = searchParams.get("filterType") as PollFitlerType;
 
   useEffect(() => {
-    dispatch(getPolls({}));
+    dispatch(getPolls({ search, filterType }));
   }, []);
 
   return (
