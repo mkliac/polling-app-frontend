@@ -10,7 +10,7 @@ import { User } from "../models/UserModel";
 import { RequestError } from "../types/ApiStatusType";
 import { deleteApi, getApi, postApi } from "../utils/api";
 
-interface PageModel {
+interface GetPollsModel {
   pageNumber?: number;
   pageSize?: number;
   sortBy?: string;
@@ -42,9 +42,9 @@ export const getPoll = createAsyncThunk<
 
 export const getPolls = createAsyncThunk<
   Poll[],
-  PageModel,
+  GetPollsModel,
   { rejectValue: RequestError }
->("polls/getPolls", async (page: PageModel, thunkAPI) => {
+>("polls/getPolls", async (page: GetPollsModel, thunkAPI) => {
   let data: Poll[] = [];
   try {
     const polls = await getApi(POLL_URI, page);
@@ -193,14 +193,20 @@ export const closePoll = createAsyncThunk<
   return data;
 });
 
+interface GetVotersModel {
+  itemId: string;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
 export const getVoters = createAsyncThunk<
   User[],
-  string,
+  GetVotersModel,
   { rejectValue: RequestError }
->("polls/getVoters", async (itemId: string, thunkAPI) => {
+>("polls/getVoters", async (request: GetVotersModel, thunkAPI) => {
   let data: User[] = [];
   try {
-    const voters = await getApi(POLL_URI + `/items/${itemId}/voters`);
+    const voters = await getApi(POLL_URI + `/items/${request.itemId}/voters`, request);
     data = voters.map((voter: User) => {
       return {
         ...voter,

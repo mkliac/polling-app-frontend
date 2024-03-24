@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CircularProgress,
   Divider,
   IconButton,
   List,
@@ -11,7 +12,14 @@ import {
   ListItemAvatar,
   ListItemText,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import CustomAvatar from "../components/CustomAvatar";
 import LoadingContent from "../components/LoadingContent";
 import { User } from "../models/UserModel";
@@ -28,13 +36,23 @@ const VotersModal = ({
   const [isLoading, setIsLoading] = useState(false);
   const [voters, setVoters] = useState<User[]>([]);
   const dispatch = useAppDispatch();
+  const [pageNumber, setPageNumber] = useState(-1);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
+    if (pageNumber === -1) {
+      setVoters(() => []);
+      setPageNumber(0);
+      setHasMore(() => true);
+      return;
+    }
+
     setIsLoading(true);
-    dispatch(getVoters(itemId))
+    dispatch(getVoters({ itemId, pageNumber }))
       .unwrap()
       .then((res) => {
-        setVoters(res);
+        if (res.length === 0) setHasMore(false);
+        setVoters((prevVoters) => [...prevVoters, ...res]);
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +60,22 @@ const VotersModal = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [pageNumber]);
+
+  const observer = useRef<any>();
+  const lastBookElementRef = useCallback(
+    (node) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPageNumber((prevPageNumber) => prevPageNumber + 1);
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, hasMore]
+  );
 
   return (
     <Box
@@ -72,16 +105,40 @@ const VotersModal = ({
               overflowY: "auto",
             }}
           >
-            {voters.map((user) => (
-              <ListItem key={user.id}>
-                <ListItemAvatar>
-                  <CustomAvatar name={user.username} />
-                </ListItemAvatar>
-                <ListItemText primary={user.username} secondary={user.email} />
-              </ListItem>
-            ))}
+            {voters.map((user, index) =>
+              voters.length === index + 1 ? (
+                <div ref={lastBookElementRef} key={user.id}>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <CustomAvatar name={user.username} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={user.username}
+                      secondary={user.email}
+                    />
+                  </ListItem>
+                </div>
+              ) : (
+                <ListItem key={user.id}>
+                  <ListItemAvatar>
+                    <CustomAvatar name={user.username} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={user.username}
+                    secondary={user.email}
+                  />
+                </ListItem>
+              )
+            )}
+            {isLoading &&
+              (voters.length === 0 ? (
+                <LoadingContent />
+              ) : (
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <CircularProgress />
+                </Box>
+              ))}
           </List>
-          {isLoading && <LoadingContent />}
         </CardContent>
       </Card>
     </Box>
