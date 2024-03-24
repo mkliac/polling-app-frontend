@@ -1,13 +1,26 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from "redux-persist";
-import storageSession from 'redux-persist/lib/storage/session'
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
+} from "redux-persist";
+import storageSession from "redux-persist/lib/storage/session";
 import { rootReducer } from "./reducers";
 import { pollDataSlice } from "./reducers/PollSlice";
 
-export const persistConfig = { key: "root", storage: storageSession, version: 1, blacklist: ["pollData"]};
+export const persistConfig = {
+  key: "root",
+  storage: storageSession,
+  version: 1,
+};
 const persistedReducer = persistReducer(
-    { ...persistConfig, blacklist: [pollDataSlice.name] },
-    rootReducer
+  { ...persistConfig, blacklist: [pollDataSlice.name] },
+  rootReducer
 );
 export const store = configureStore({
   reducer: persistedReducer,
@@ -21,4 +34,3 @@ export const store = configureStore({
 
 export type AppDispatch = typeof store.dispatch;
 export const persistor = persistStore(store);
-

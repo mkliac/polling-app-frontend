@@ -17,7 +17,6 @@ import {
   setSideBar,
   toggleSideBar,
 } from "../redux/reducers/ConfigSlice";
-import { getPolls } from "../services/PollService";
 
 const MenuBar = () => {
   const theme = useTheme();
@@ -36,8 +35,6 @@ const MenuBar = () => {
       },
       { replace: true }
     );
-
-    dispatch(getPolls({ filterType }));
     dispatch(setSideBar(false));
   };
   const list = (

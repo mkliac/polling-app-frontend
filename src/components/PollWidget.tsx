@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Divider,
   IconButton,
   Menu,
   MenuItem,
@@ -20,18 +19,23 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Poll, PollItem } from "../models/PollModels";
+import PollShareModal from "../pages/PollShareModal";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { selectUser } from "../redux/reducers/AuthSlice";
 import { closePoll, deletePoll, vote } from "../services/PollService";
 import CustomAvatar from "./CustomAvatar";
 import ErrorSnackbar from "./ErrorSnackbar";
 import LoadingContent from "./LoadingContent";
 import PollItemsButton from "./PollItemsButton";
-import PollShareModal from "../pages/PollShareModal";
-import { selectUser } from "../redux/reducers/AuthSlice";
-import { removePollInState } from "../redux/reducers/PollSlice";
 import TimeSlider from "./TimeSlider";
 
-const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
+const PollWidget = ({
+  initPoll,
+  removePoll,
+}: {
+  initPoll: Poll;
+  removePoll: (id: string) => void;
+}) => {
   const [poll, setPoll] = useState<Poll>(initPoll);
   const [checkItemId, setCheckItemId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -124,8 +128,11 @@ const PollWidget = ({ initPoll }: { initPoll: Poll }) => {
               <MenuItem
                 disabled={!isPollOwner}
                 onClick={() => {
-                  dispatch(deletePoll(poll.id));
-                  dispatch(removePollInState(poll.id));
+                  dispatch(deletePoll(poll.id))
+                    .unwrap()
+                    .then(() => {
+                      removePoll(poll.id);
+                    });
                   handleOptionClose();
                 }}
               >

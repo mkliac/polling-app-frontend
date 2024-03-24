@@ -16,7 +16,6 @@ import {
 import { APIStatus, APIStatusType } from "../../types/ApiStatusType";
 
 type PollState = {
-  polls: Poll[];
   poll: Poll;
   getPollsStatus: APIStatusType;
   submitStatus: APIStatusType;
@@ -24,7 +23,6 @@ type PollState = {
 };
 
 const initialState: PollState = {
-  polls: [],
   poll: null,
   getPollsStatus: APIStatus.IDLE,
   submitStatus: APIStatus.IDLE,
@@ -32,15 +30,11 @@ const initialState: PollState = {
 };
 
 export const pollDataSlice = createSlice({
-  name: "pollData",
+  name: "poll",
   initialState,
   reducers: {
     resetSubmitStatus: (state) => {
-      console.log("resetSubmitStatus");
       state.submitStatus = APIStatus.IDLE;
-    },
-    removePollInState: (state, action) => {
-      state.polls = state.polls.filter((poll) => poll.id !== action.payload);
     },
   },
 
@@ -60,7 +54,6 @@ export const pollDataSlice = createSlice({
 
     builder.addCase(getPolls.fulfilled, (state, { payload }) => {
       state.getPollsStatus = APIStatus.SUCCESS;
-      state.polls = [...payload];
     });
 
     builder.addCase(getPolls.rejected, (state, { payload }) => {
@@ -131,10 +124,9 @@ export const pollDataSlice = createSlice({
   },
 });
 
-export const selectPolls = (state: RootState) => state.poll.polls;
 export const selectPoll = (state: RootState) => state.poll.poll;
 export const selectPollStatus = (state: RootState) => state.poll.getPollsStatus;
 export const selectSubmitStatus = (state: RootState) => state.poll.submitStatus;
 export const selectPollError = (state: RootState) => state.poll.error;
-export const { resetSubmitStatus, removePollInState } = pollDataSlice.actions;
+export const { resetSubmitStatus } = pollDataSlice.actions;
 export default pollDataSlice.reducer;

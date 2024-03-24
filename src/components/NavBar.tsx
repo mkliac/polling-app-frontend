@@ -13,7 +13,6 @@ import { PollFilter } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
 import { toggleSideBar } from "../redux/reducers/ConfigSlice";
-import { getPolls } from "../services/PollService";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
 
@@ -37,9 +36,6 @@ const NavBar = () => {
       { replace: true }
     );
     setInputSearch("");
-    const search = searchParams.get("search");
-    const filterType = searchParams.get("filterType") as PollFilter;
-    dispatch(getPolls({ search, filterType }));
   };
 
   return (

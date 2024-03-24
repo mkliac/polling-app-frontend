@@ -1,6 +1,4 @@
-import {
-  Box
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PollWidget from "../components/PollWidget";
@@ -33,8 +31,8 @@ const PollForm = () => {
         justifyContent: "center",
       }}
     >
-      <Box sx={{ maxWidth: "32rem" }}>
-        {poll && <PollWidget initPoll={poll} />}
+      <Box sx={{ width: "32rem" }}>
+        {poll && <PollWidget initPoll={poll} removePoll={(id) => {}} />}
       </Box>
     </Box>
   );
