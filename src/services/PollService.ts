@@ -206,7 +206,10 @@ export const getVoters = createAsyncThunk<
 >("polls/getVoters", async (request: GetVotersModel, thunkAPI) => {
   let data: User[] = [];
   try {
-    const voters = await getApi(POLL_URI + `/items/${request.itemId}/voters`, request);
+    const voters = await getApi(
+      POLL_URI + `/items/${request.itemId}/voters`,
+      request
+    );
     data = voters.map((voter: User) => {
       return {
         ...voter,
@@ -219,4 +222,23 @@ export const getVoters = createAsyncThunk<
   }
 
   return data;
+});
+
+interface BookmarkModel {
+  pollId: string;
+  isBookmark: boolean;
+}
+
+export const bookmark = createAsyncThunk<
+  void,
+  BookmarkModel,
+  { rejectValue: RequestError }
+>("polls/bookmark", async (request: BookmarkModel, thunkAPI) => {
+  try {
+    await postApi(POLL_URI + `/${request.pollId}/bookmark`, null, request);
+  } catch (error) {
+    return thunkAPI.rejectWithValue({
+      message: error.response.data.message,
+    });
+  }
 });

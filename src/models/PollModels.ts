@@ -21,6 +21,7 @@ export interface PollItem {
   id: string;
   text: string;
   voteCount: number;
+  voted: boolean;
 }
 
 export interface Poll {
@@ -28,20 +29,21 @@ export interface Poll {
   title: string;
   description: string;
   items: PollItem[];
-  isAnonymous: boolean;
-  isPrivate: boolean;
+  anonymous: boolean;
+  private: boolean;
   createdAt: Date;
   createdBy: User;
   closedDate: Date;
+  bookmarked: boolean;
 }
 
 export enum PollFilter {
   ALL = "ALL",
   USER = "USER",
-  SAVED = "SAVED",
+  BOOKMARKED = "BOOKMARKED",
 }
 
 export type PollFitlerType =
   | PollFilter.ALL
   | PollFilter.USER
-  | PollFilter.SAVED;
+  | PollFilter.BOOKMARKED;

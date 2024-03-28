@@ -17,11 +17,9 @@ import FlexBetween from "./FlexBwtween";
 const PollItemsButton = ({
   poll,
   onVote,
-  checkItemId,
 }: {
   poll: Poll;
   onVote: Dispatch<SetStateAction<PollItem>>;
-  checkItemId: string;
 }) => {
   const [totalVotes, setTotalVotes] = useState(-1);
   const [isOpenView, setIsOpenView] = useState(false);
@@ -70,16 +68,13 @@ const PollItemsButton = ({
                   transition: "0.05s",
                 },
                 border: "0.13rem solid",
-                borderColor: checkItemId === item.id ? "black" : "#dcdcdc",
+                borderColor: item.voted ? "black" : "#dcdcdc",
                 padding: "0.4rem",
               }}
               onClick={() => onVote(item)}
             >
               <FlexBetween width="100%" gap="0.4rem">
-                <Radio
-                  checked={checkItemId === item.id}
-                  sx={{ padding: "0" }}
-                />
+                <Radio checked={item.voted} sx={{ padding: "0" }} />
                 <Box sx={{ width: "100%" }}>
                   <Box
                     sx={{ display: "flex", justifyContent: "space-between" }}

@@ -3,6 +3,7 @@ import { RootState } from ".";
 import { Poll } from "../../models/PollModels";
 import {
   addPollItems,
+  bookmark,
   closePoll,
   deletePoll,
   deletePollItems,
@@ -121,6 +122,12 @@ export const pollDataSlice = createSlice({
     builder.addCase(getVoters.fulfilled, (state, { payload }) => {});
 
     builder.addCase(getVoters.rejected, (state, { payload }) => {});
+
+    builder.addCase(bookmark.pending, (state) => {});
+
+    builder.addCase(bookmark.fulfilled, (state, { payload }) => {});
+
+    builder.addCase(bookmark.rejected, (state, { payload }) => {});
   },
 });
 

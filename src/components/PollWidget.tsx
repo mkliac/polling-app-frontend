@@ -1,4 +1,5 @@
 import {
+  Bookmark,
   BookmarkBorder,
   DeleteForever,
   EventBusy,
@@ -18,11 +19,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Poll, PollItem } from "../models/PollModels";
+import { useSearchParams } from "react-router-dom";
+import {
+  Poll,
+  PollFilter,
+  PollFitlerType,
+  PollItem,
+} from "../models/PollModels";
 import PollShareModal from "../pages/PollShareModal";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
-import { closePoll, deletePoll, vote } from "../services/PollService";
+import { bookmark, closePoll, deletePoll, vote } from "../services/PollService";
 import CustomAvatar from "./CustomAvatar";
 import ErrorSnackbar from "./ErrorSnackbar";
 import LoadingContent from "./LoadingContent";
@@ -37,7 +44,6 @@ const PollWidget = ({
   removePoll: (id: string) => void;
 }) => {
   const [poll, setPoll] = useState<Poll>(initPoll);
-  const [checkItemId, setCheckItemId] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [isError, setIsError] = useState(false);
@@ -48,6 +54,10 @@ const PollWidget = ({
   const user = useAppSelector(selectUser);
   const isPollOwner =
     poll.createdBy !== undefined && poll.createdBy.id === user.id;
+  const [isSaved, setIsSaved] = useState(initPoll.bookmarked);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterType = searchParams.get("filterType") as PollFitlerType;
 
   const onVote = (item: PollItem) => {
     setIsLoading(true);
@@ -55,7 +65,6 @@ const PollWidget = ({
       .unwrap()
       .then((res) => {
         setPoll(res);
-        setCheckItemId(item.id);
       })
       .catch((err) => {
         setErrorMsg(err.message);
@@ -107,8 +116,17 @@ const PollWidget = ({
                 <Share />
                 Share
               </MenuItem>
-              <MenuItem>
-                <BookmarkBorder />
+              <MenuItem
+                onClick={() => {
+                  dispatch(bookmark({ pollId: poll.id, isBookmark: !isSaved }));
+                  setIsSaved(!isSaved);
+                  if (filterType === PollFilter.BOOKMARKED) {
+                    removePoll(poll.id);
+                  }
+                  handleOptionClose();
+                }}
+              >
+                {isSaved ? <Bookmark /> : <BookmarkBorder />}
                 Save
               </MenuItem>
               <MenuItem disabled={!isPollOwner}>
@@ -164,11 +182,7 @@ const PollWidget = ({
             date2={new Date(poll.closedDate)}
           />
         )}
-        <PollItemsButton
-          poll={poll}
-          onVote={onVote}
-          checkItemId={checkItemId}
-        />
+        <PollItemsButton poll={poll} onVote={onVote} />
         {isLoading && <LoadingContent />}
         <ErrorSnackbar
           isTriggered={isError}

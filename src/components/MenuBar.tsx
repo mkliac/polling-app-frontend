@@ -77,7 +77,7 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
-        onClick={() => onSelect(PollFilter.SAVED)}
+        onClick={() => onSelect(PollFilter.BOOKMARKED)}
       >
         <ListItemIcon>
           <Bookmarks />
