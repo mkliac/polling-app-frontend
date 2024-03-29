@@ -1,10 +1,21 @@
-const TOKEN_KEY = "access_token";
+const ACCESS_TOKEN_KEY = "access_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
+
 class TokenService {
-  saveToken(token: string) {
-    sessionStorage.setItem(TOKEN_KEY, token);
+  saveAccessToken(token: string) {
+    sessionStorage.setItem(ACCESS_TOKEN_KEY, token);
   }
-  getToken() {
-    return sessionStorage.getItem(TOKEN_KEY);
+
+  getAccessToken() {
+    return sessionStorage.getItem(ACCESS_TOKEN_KEY);
+  }
+
+  saveRefreshToken(token: string) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, token);
+  }
+
+  getRefreshToken() {
+    return localStorage.getItem(REFRESH_TOKEN_KEY);
   }
 }
 

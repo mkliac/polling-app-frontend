@@ -19,13 +19,16 @@ import FlexBetween from "./FlexBwtween";
 const NavBar = () => {
   const theme = useTheme();
   const user = useAppSelector(selectUser);
+  console.log(user);
   const dispatch = useAppDispatch();
   const matches = useMediaQuery("(min-width:750px)");
   const [searchParams, setSearchParams] = useSearchParams({
     filterType: PollFilter.ALL,
     search: "",
   });
-  const [inputSearch, setInputSearch] = useState(searchParams.get("search") || "");
+  const [inputSearch, setInputSearch] = useState(
+    searchParams.get("search") || ""
+  );
 
   const onSearch = () => {
     setSearchParams(

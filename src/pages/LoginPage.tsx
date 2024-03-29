@@ -1,7 +1,7 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
-import { GoogleLogin } from "@react-oauth/google";
-import { useLayoutEffect } from "react";
-import { Navigate } from "react-router-dom";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useEffect } from "react";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   selectIsLoggedIn,
@@ -9,36 +9,63 @@ import {
   setLogout,
 } from "../redux/reducers/AuthSlice";
 import { cacheAppConfig } from "../services/AppConfigService";
+import { getNewAccessToken, getTokens } from "../services/AuthService";
 import TokenService from "../services/TokenService";
 import UserService from "../services/UserService";
 
 const LoginForm = () => {
+  const [searchParams] = useSearchParams();
+  const code = searchParams.get("code");
+  const redirectUri = window.location.href.split("?")[0].slice(0, -1);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const dispatch = useAppDispatch();
 
-  const getUser = () => {
-    UserService.login()
-      .then((data) => {
-        dispatch(setLogin({ user: data }));
+  useEffect(() => {
+    if (isLoggedIn) return;
+
+    let refreshToken = TokenService.getRefreshToken();
+    if (!refreshToken) return;
+
+    getNewAccessToken(refreshToken)
+      .then((res) => {
+        onLoginSuccess(res);
       })
       .catch(() => {
         dispatch(setLogout());
       });
+  }, []);
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => console.log(codeResponse),
+    onError: (error) => console.log(error),
+    flow: "auth-code",
+    scope: "openid profile email",
+    ux_mode: "redirect",
+    redirect_uri: redirectUri,
+  });
+
+  useEffect(() => {
+    exchangeAuthCode();
+  }, [code]);
+
+  const exchangeAuthCode = async () => {
+    if (code) {
+      try {
+        const response = await getTokens(code, redirectUri);
+        onLoginSuccess(response);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
-  const onError = () => {
-    console.log("Failed to login");
-  };
-
-  const onSuccess = (res) => {
-    TokenService.saveToken(res.credential);
-    getUser();
+  const onLoginSuccess = (response) => {
+    if (response.refreshToken)
+      TokenService.saveRefreshToken(response.refreshToken);
+    TokenService.saveAccessToken(response.idToken);
+    UserService.getUser().then((data) => dispatch(setLogin({ user: data })));
     dispatch(cacheAppConfig());
   };
-
-  useLayoutEffect(() => {
-    getUser();
-  }, []);
 
   return (
     <Box
@@ -57,14 +84,7 @@ const LoginForm = () => {
           </Typography>
           <Typography textAlign={"left"}>Sign in to continue.</Typography>
           {!isLoggedIn ? (
-            <GoogleLogin
-              size="large"
-              type="standard"
-              text="signin_with"
-              theme="filled_black"
-              onSuccess={onSuccess}
-              onError={onError}
-            />
+            <Button onClick={login}>Login with Google</Button>
           ) : (
             <Navigate to={sessionStorage.getItem("redirect") || "/home"} />
           )}

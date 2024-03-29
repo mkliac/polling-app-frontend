@@ -11,8 +11,22 @@ export const getApi = async (url: string, params?: object, data?: object) => {
     data,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getToken()}`,
+      Authorization: `Bearer ${TokenService.getAccessToken()}`,
     },
+  });
+
+  return res.data;
+};
+
+export const getApiWithoutAuth = async (
+  url: string,
+  params?: object,
+  data?: object
+) => {
+  const res = await axios.get(BACKEND_URL + url, {
+    params,
+    data,
+    timeout: REQUEST_TIMEOUT,
   });
 
   return res.data;
@@ -23,8 +37,21 @@ export const postApi = async (url: string, data?: object, params?: object) => {
     params,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getToken()}`,
+      Authorization: `Bearer ${TokenService.getAccessToken()}`,
     },
+  });
+
+  return res.data;
+};
+
+export const postApiWithoutAuth = async (
+  url: string,
+  data?: object,
+  params?: object
+) => {
+  const res = await axios.post(BACKEND_URL + url, data, {
+    params,
+    timeout: REQUEST_TIMEOUT,
   });
 
   return res.data;
@@ -35,8 +62,17 @@ export const deleteApi = async (url: string, data?: object) => {
     data,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getToken()}`,
+      Authorization: `Bearer ${TokenService.getAccessToken()}`,
     },
+  });
+
+  return res.data;
+};
+
+export const deleteApiWithoutAuth = async (url: string, data?: object) => {
+  const res = await axios.delete(BACKEND_URL + url, {
+    data,
+    timeout: REQUEST_TIMEOUT,
   });
 
   return res.data;
@@ -49,7 +85,7 @@ export const putApi = async (url: string, params?: object) => {
     // params,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getToken()}`,
+      Authorization: `Bearer ${TokenService.getAccessToken()}`,
     },
   });
 
