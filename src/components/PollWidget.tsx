@@ -5,7 +5,7 @@ import {
   EventBusy,
   ModeEdit,
   MoreHoriz,
-  Share,
+  Share
 } from "@mui/icons-material";
 import {
   Box,
@@ -17,7 +17,7 @@ import {
   Menu,
   MenuItem,
   Modal,
-  Typography,
+  Typography
 } from "@mui/material";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -31,11 +31,12 @@ import PollShareModal from "../pages/PollShareModal";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
 import { bookmark, closePoll, deletePoll, vote } from "../services/PollService";
+import { formatRelativeTime } from "../utils/TextUtil";
 import CustomAvatar from "./CustomAvatar";
 import ErrorSnackbar from "./ErrorSnackbar";
+import ExpireAlarm from "./ExpireAlarm";
 import LoadingContent from "./LoadingContent";
 import PollItemsButton from "./PollItemsButton";
-import TimeSlider from "./TimeSlider";
 
 const PollWidget = ({
   initPoll,
@@ -88,13 +89,35 @@ const PollWidget = ({
     <Card sx={{ position: "relative", margin: "0.75rem 0" }}>
       <CardHeader
         avatar={<CustomAvatar src={poll.createdBy?.picture} />}
-        title={poll.createdBy ? poll.createdBy.username : "Anonymous"}
+        title={
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "left",
+              alignItems: "center",
+            }}
+          >
+            <span>
+              {poll.createdBy ? poll.createdBy.username : "Anonymous"}
+            </span>
+            <span style={{ margin: "0 0.4rem" }}>&middot;</span>
+            <Typography variant="caption" color="textSecondary">
+              {formatRelativeTime(new Date(poll.createdAt))}
+            </Typography>
+          </div>
+        }
         subheader={poll.createdBy ? poll.createdBy.email : undefined}
         sx={{ padding: "0.5rem 1rem" }}
         titleTypographyProps={{ variant: "h5", textAlign: "left" }}
         subheaderTypographyProps={{ textAlign: "left" }}
         action={
           <Box>
+            {poll.closedDate && (
+              <ExpireAlarm
+                date1={new Date(poll.createdAt)}
+                date2={new Date(poll.closedDate)}
+              />
+            )}
             <IconButton aria-label="settings" onClick={handleOptionClick}>
               <MoreHoriz />
             </IconButton>
@@ -155,12 +178,6 @@ const PollWidget = ({
         <Typography paragraph sx={{ mt: "0.5rem", textAlign: "left" }}>
           {poll.description}
         </Typography>
-        {poll.closedDate && (
-          <TimeSlider
-            date1={new Date(poll.createdAt)}
-            date2={new Date(poll.closedDate)}
-          />
-        )}
         <PollItemsButton poll={poll} onVote={onVote} />
         {isLoading && <LoadingContent />}
         <ErrorSnackbar

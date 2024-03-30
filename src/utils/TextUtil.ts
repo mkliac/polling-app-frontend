@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from "date-fns";
+
 const defaultMinLength = 0;
 
 export const getHelperText = (
@@ -33,4 +35,8 @@ export const isTextValid = (
     text.length >= minLength &&
     (maxLength === undefined || text.length <= maxLength)
   );
+};
+
+export const formatRelativeTime = (date: Date) => {
+  return formatDistanceToNow(date, { addSuffix: true });
 };
