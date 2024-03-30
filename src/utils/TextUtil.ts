@@ -34,10 +34,3 @@ export const isTextValid = (
     (maxLength === undefined || text.length <= maxLength)
   );
 };
-
-export const toAvatarText = (text: string) => {
-  const words = text.split(" ");
-  return (
-    words.length > 1 ? words[0][0] + words[1][0] : words[0][0]
-  ).toUpperCase();
-};

@@ -1,17 +1,12 @@
-import { Avatar } from "@mui/material";
-import { toAvatarText } from "../utils/TextUtil";
+import { Avatar, AvatarProps, styled } from "@mui/material";
 
-const CustomAvatar = ({name}: {name?: string}) => {
-  return (
-    <Avatar
-      sx={{
-        height: "1.9rem",
-        width: "1.9rem",
-      }}
-    >
-      {toAvatarText(name)}
-    </Avatar>
-  );
+const StyleAvatar = styled(Avatar)({
+  height: "1.9rem",
+  width: "1.9rem",
+});
+
+const CustomAvatar = (props: AvatarProps) => {
+  return <StyleAvatar {...props} />;
 };
 
 export default CustomAvatar;

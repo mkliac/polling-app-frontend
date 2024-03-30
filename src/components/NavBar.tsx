@@ -1,8 +1,10 @@
-import { Menu, Search } from "@mui/icons-material";
+import { Logout, Menu as MenuIcon, Search } from "@mui/icons-material";
 import {
   Box,
   IconButton,
   InputBase,
+  Menu,
+  MenuItem,
   Typography,
   useMediaQuery,
   useTheme,
@@ -11,7 +13,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PollFilter } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectUser } from "../redux/reducers/AuthSlice";
+import { selectUser, setLogout } from "../redux/reducers/AuthSlice";
 import { toggleSideBar } from "../redux/reducers/ConfigSlice";
 import CustomAvatar from "./CustomAvatar";
 import FlexBetween from "./FlexBwtween";
@@ -19,7 +21,6 @@ import FlexBetween from "./FlexBwtween";
 const NavBar = () => {
   const theme = useTheme();
   const user = useAppSelector(selectUser);
-  console.log(user);
   const dispatch = useAppDispatch();
   const matches = useMediaQuery("(min-width:750px)");
   const [searchParams, setSearchParams] = useSearchParams({
@@ -29,6 +30,8 @@ const NavBar = () => {
   const [inputSearch, setInputSearch] = useState(
     searchParams.get("search") || ""
   );
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isAnchorClick = Boolean(anchorEl);
 
   const onSearch = () => {
     setSearchParams(
@@ -41,6 +44,18 @@ const NavBar = () => {
     setInputSearch("");
   };
 
+  const logout = () => {
+    dispatch(setLogout());
+  };
+
+  const handleOptionClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleOptionClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Box
       sx={{ width: "100%", backgroundColor: theme.palette.background.paper }}
@@ -48,7 +63,7 @@ const NavBar = () => {
       <FlexBetween sx={{ padding: "0.1rem 0.5rem", gap: "1rem" }}>
         <FlexBetween sx={{ gap: "1rem" }}>
           <IconButton onClick={() => dispatch(toggleSideBar())}>
-            <Menu />
+            <MenuIcon />
           </IconButton>
           <Typography
             fontWeight="bold"
@@ -78,7 +93,29 @@ const NavBar = () => {
           </IconButton>
         </FlexBetween>
         <FlexBetween sx={{ gap: "0.5rem" }}>
-          <CustomAvatar name={user.username} />
+          <Box>
+            <IconButton onClick={handleOptionClick}>
+              <CustomAvatar src={user.picture} />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
+              open={isAnchorClick}
+              onClose={handleOptionClose}
+              disableScrollLock={true}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleOptionClose();
+                  logout();
+                }}
+              >
+                <Logout />
+                Logout
+              </MenuItem>
+            </Menu>
+          </Box>
           {matches ? (
             <Typography variant="h4">{user.username}</Typography>
           ) : null}

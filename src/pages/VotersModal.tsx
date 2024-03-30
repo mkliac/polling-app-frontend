@@ -110,7 +110,7 @@ const VotersModal = ({
                 <div ref={lastBookElementRef} key={user.id}>
                   <ListItem>
                     <ListItemAvatar>
-                      <CustomAvatar name={user.username} />
+                      <CustomAvatar src={user.picture} />
                     </ListItemAvatar>
                     <ListItemText
                       primary={user.username}
@@ -121,7 +121,7 @@ const VotersModal = ({
               ) : (
                 <ListItem key={user.id}>
                   <ListItemAvatar>
-                    <CustomAvatar name={user.username} />
+                    <CustomAvatar src={user.picture} />
                   </ListItemAvatar>
                   <ListItemText
                     primary={user.username}

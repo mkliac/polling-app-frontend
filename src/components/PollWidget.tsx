@@ -88,7 +88,7 @@ const PollWidget = ({
       sx={{ position: "relative", margin: "1.5rem 0", borderRadius: "0.75rem" }}
     >
       <CardHeader
-        avatar={<CustomAvatar name={poll.createdBy?.username} />}
+        avatar={<CustomAvatar src={poll.createdBy?.picture} />}
         title={poll.createdBy ? poll.createdBy.username : "Anonymous"}
         subheader={poll.createdBy ? poll.createdBy.email : undefined}
         sx={{ padding: "0.5rem 1rem" }}
@@ -136,7 +136,9 @@ const PollWidget = ({
               <MenuItem
                 disabled={!isPollOwner}
                 onClick={() => {
-                  dispatch(closePoll(poll.id));
+                  dispatch(closePoll(poll.id))
+                    .unwrap()
+                    .then((res) => setPoll(res));
                   handleOptionClose();
                 }}
               >
