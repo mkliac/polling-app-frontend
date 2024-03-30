@@ -1,8 +1,9 @@
 import { Google } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
+import LoadingContent from "../components/LoadingContent";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import {
   selectIsLoggedIn,
@@ -20,6 +21,7 @@ const LoginForm = () => {
   const redirectUri = window.location.href.split("?")[0].slice(0, -1);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn) return;
@@ -27,12 +29,16 @@ const LoginForm = () => {
     let refreshToken = TokenService.getRefreshToken();
     if (!refreshToken) return;
 
+    setIsLoading(true);
     getNewAccessToken(refreshToken)
       .then((res) => {
         onLoginSuccess(res);
       })
       .catch(() => {
         dispatch(setLogout());
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -51,11 +57,14 @@ const LoginForm = () => {
 
   const exchangeAuthCode = async () => {
     if (code) {
+      setIsLoading(true);
       try {
         const response = await getTokens(code, redirectUri);
         onLoginSuccess(response);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -98,6 +107,7 @@ const LoginForm = () => {
           )}
         </CardContent>
       </Card>
+      {isLoading && <LoadingContent />}
     </Box>
   );
 };
