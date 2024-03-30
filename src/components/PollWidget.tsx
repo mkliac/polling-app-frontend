@@ -10,6 +10,7 @@ import {
 import {
   Box,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
   IconButton,
@@ -84,9 +85,7 @@ const PollWidget = ({
   };
 
   return (
-    <Card
-      sx={{ position: "relative", margin: "1.5rem 0", borderRadius: "0.75rem" }}
-    >
+    <Card sx={{ position: "relative", margin: "0.75rem 0" }}>
       <CardHeader
         avatar={<CustomAvatar src={poll.createdBy?.picture} />}
         title={poll.createdBy ? poll.createdBy.username : "Anonymous"}
@@ -107,28 +106,6 @@ const PollWidget = ({
               onClose={handleOptionClose}
               disableScrollLock={true}
             >
-              <MenuItem
-                onClick={() => {
-                  setIsShare(true);
-                  handleOptionClose();
-                }}
-              >
-                <Share />
-                Share
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  dispatch(bookmark({ pollId: poll.id, isBookmark: !isSaved }));
-                  setIsSaved(!isSaved);
-                  if (filterType === PollFilter.BOOKMARKED) {
-                    removePoll(poll.id);
-                  }
-                  handleOptionClose();
-                }}
-              >
-                {isSaved ? <Bookmark /> : <BookmarkBorder />}
-                Save
-              </MenuItem>
               <MenuItem disabled={!isPollOwner}>
                 <ModeEdit />
                 Edit
@@ -192,6 +169,24 @@ const PollWidget = ({
           message={errorMsg}
         />
       </CardContent>
+      <CardActions disableSpacing sx={{ justifyContent: "right" }}>
+        <IconButton aria-label="share" onClick={() => setIsShare(true)}>
+          <Share />
+        </IconButton>
+        <IconButton
+          aria-label="add to favorites"
+          onClick={() => {
+            dispatch(bookmark({ pollId: poll.id, isBookmark: !isSaved }));
+            setIsSaved(!isSaved);
+            if (filterType === PollFilter.BOOKMARKED) {
+              removePoll(poll.id);
+            }
+            handleOptionClose();
+          }}
+        >
+          {isSaved ? <Bookmark /> : <BookmarkBorder />}
+        </IconButton>
+      </CardActions>
       <Modal open={isShare} onClose={() => setIsShare(false)}>
         <Box>
           <PollShareModal id={poll.id} />
