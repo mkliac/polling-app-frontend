@@ -1,3 +1,4 @@
+import { Google } from "@mui/icons-material";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useEffect } from "react";
@@ -84,7 +85,14 @@ const LoginForm = () => {
           </Typography>
           <Typography textAlign={"left"}>Sign in to continue.</Typography>
           {!isLoggedIn ? (
-            <Button onClick={login}>Login with Google</Button>
+            <Button
+              onClick={login}
+              startIcon={<Google />}
+              variant="contained"
+              color="primary"
+            >
+              Login with Google
+            </Button>
           ) : (
             <Navigate to={sessionStorage.getItem("redirect") || "/home"} />
           )}
