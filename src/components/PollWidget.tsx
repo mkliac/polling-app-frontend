@@ -55,7 +55,7 @@ const PollWidget = ({
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const isPollOwner =
-    poll.createdBy !== undefined && poll.createdBy.id === user.id;
+    poll.createdBy !== undefined && poll.createdBy.email === user.email;
   const [isSaved, setIsSaved] = useState(initPoll.bookmarked);
 
   const [searchParams, setSearchParams] = useSearchParams();

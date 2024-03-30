@@ -107,7 +107,7 @@ const VotersModal = ({
           >
             {voters.map((user, index) =>
               voters.length === index + 1 ? (
-                <div ref={lastBookElementRef} key={user.id}>
+                <div ref={lastBookElementRef} key={user.email}>
                   <ListItem>
                     <ListItemAvatar>
                       <CustomAvatar src={user.picture} />
@@ -119,7 +119,7 @@ const VotersModal = ({
                   </ListItem>
                 </div>
               ) : (
-                <ListItem key={user.id}>
+                <ListItem key={user.email}>
                   <ListItemAvatar>
                     <CustomAvatar src={user.picture} />
                   </ListItemAvatar>
