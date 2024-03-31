@@ -1,8 +1,8 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAppSelector } from "../redux/hook";
 import { selectIsLoggedIn } from "../redux/reducers/AuthSlice";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const prevLocation = useLocation();
 
@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
     sessionStorage.setItem("redirect", prevLocation.pathname);
     return <Navigate to="/" />;
   }
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

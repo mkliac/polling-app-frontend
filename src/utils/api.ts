@@ -1,5 +1,5 @@
 import axios from "axios";
-import TokenService from "../services/TokenService";
+import { getAccessToken } from "../services/TokenService";
 
 const BACKEND_URL = process.env.REACT_APP_SERVER_BASE_URL;
 // const BACKEND_URL = "http://localhost:8080"
@@ -11,7 +11,7 @@ export const getApi = async (url: string, params?: object, data?: object) => {
     data,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getAccessToken()}`,
+      Authorization: `Bearer ${getAccessToken()}`,
     },
   });
 
@@ -37,7 +37,7 @@ export const postApi = async (url: string, data?: object, params?: object) => {
     params,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getAccessToken()}`,
+      Authorization: `Bearer ${getAccessToken()}`,
     },
   });
 
@@ -62,7 +62,7 @@ export const deleteApi = async (url: string, data?: object) => {
     data,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getAccessToken()}`,
+      Authorization: `Bearer ${getAccessToken()}`,
     },
   });
 
@@ -85,7 +85,7 @@ export const putApi = async (url: string, params?: object) => {
     // params,
     timeout: REQUEST_TIMEOUT,
     headers: {
-      Authorization: `Bearer ${TokenService.getAccessToken()}`,
+      Authorization: `Bearer ${getAccessToken()}`,
     },
   });
 

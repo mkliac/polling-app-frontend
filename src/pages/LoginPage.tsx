@@ -5,15 +5,11 @@ import { useEffect, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 import LoadingContent from "../components/LoadingContent";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
-import {
-  selectIsLoggedIn,
-  setLogin,
-  setLogout,
-} from "../redux/reducers/AuthSlice";
+import { selectIsLoggedIn, setLogin } from "../redux/reducers/AuthSlice";
 import { cacheAppConfig } from "../services/AppConfigService";
-import { getNewAccessToken, getTokens } from "../services/AuthService";
-import TokenService from "../services/TokenService";
-import UserService from "../services/UserService";
+import { getTokens } from "../services/AuthService";
+import { saveAccessToken, saveRefreshToken } from "../services/TokenService";
+import { getUser } from "../services/UserService";
 
 const LoginForm = () => {
   const [searchParams] = useSearchParams();
@@ -22,25 +18,6 @@ const LoginForm = () => {
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (isLoggedIn) return;
-
-    let refreshToken = TokenService.getRefreshToken();
-    if (!refreshToken) return;
-
-    setIsLoading(true);
-    getNewAccessToken(refreshToken)
-      .then((res) => {
-        onLoginSuccess(res);
-      })
-      .catch(() => {
-        dispatch(setLogout());
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => console.log(codeResponse),
@@ -70,12 +47,17 @@ const LoginForm = () => {
   };
 
   const onLoginSuccess = (response) => {
-    if (response.refreshToken)
-      TokenService.saveRefreshToken(response.refreshToken);
-    TokenService.saveAccessToken(response.idToken);
-    UserService.getUser().then((data) => dispatch(setLogin({ user: data })));
-    dispatch(cacheAppConfig());
+    if (response.refreshToken) saveRefreshToken(response.refreshToken);
+    saveAccessToken(response.idToken);
+    getUser().then((data) => dispatch(setLogin({ user: data })));
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log("caching app config");
+      dispatch(cacheAppConfig());
+    }
+  }, [isLoggedIn]);
 
   return (
     <Box
