@@ -19,7 +19,7 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  const login = useGoogleLogin({
+  const signIn = useGoogleLogin({
     onSuccess: (codeResponse) => console.log(codeResponse),
     onError: (error) => console.log(error),
     flow: "auth-code",
@@ -29,10 +29,10 @@ const LoginForm = () => {
   });
 
   useEffect(() => {
-    exchangeAuthCode();
+    handleLogin();
   }, [code]);
 
-  const exchangeAuthCode = async () => {
+  const handleLogin = async () => {
     if (code) {
       setIsLoading(true);
       try {
@@ -77,7 +77,7 @@ const LoginForm = () => {
           <Typography textAlign={"left"}>Sign in to continue.</Typography>
           {!isLoggedIn ? (
             <Button
-              onClick={login}
+              onClick={signIn}
               startIcon={<Google />}
               variant="contained"
               color="primary"
