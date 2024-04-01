@@ -1,10 +1,11 @@
-import { Add, Delete } from "@mui/icons-material";
+import { Add, Delete, Home } from "@mui/icons-material";
 import {
   Box,
   Button,
   Card,
   CardContent,
   Divider,
+  Fab,
   FormControlLabel,
   IconButton,
   List,
@@ -22,6 +23,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CustomTextField from "../components/CustomTextField";
 import ErrorSnackbar from "../components/ErrorSnackbar";
 import FlexBetween from "../components/FlexBwtween";
@@ -62,6 +64,7 @@ const PollSubmitForm = () => {
   const theme = useTheme();
   const matches = useMediaQuery("(min-width:650px)");
   const pollConfig = useAppSelector(selectAppConfig).pollConfig;
+  const navigate = useNavigate();
 
   const stepBack = () => {
     setActiveStep((prev) => (prev === 0 ? 0 : prev - 1));
@@ -124,7 +127,7 @@ const PollSubmitForm = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   return (
     <Box
       width="100%"
@@ -304,6 +307,7 @@ const PollSubmitForm = () => {
                       checked={request.isPrivate}
                       control={
                         <Switch
+                          disabled
                           onChange={(e) => {
                             setPrivate(e.target.checked);
                           }}
@@ -315,6 +319,7 @@ const PollSubmitForm = () => {
                       checked={request.isAnonymous}
                       control={
                         <Switch
+                          disabled
                           onChange={(e) => {
                             setAnonymous(e.target.checked);
                           }}
@@ -353,6 +358,12 @@ const PollSubmitForm = () => {
               Back
             </Button>
             <Button
+              sx={{
+                color:
+                  activeStep === steps.length - 1 && id !== ""
+                    ? "lightgreen"
+                    : "",
+              }}
               onClick={() => {
                 if (activeStep !== steps.length - 1) {
                   stepNext();
@@ -376,6 +387,24 @@ const PollSubmitForm = () => {
             <PollShareModal id={id} />
           </Box>
         </Modal>
+        <Fab
+          sx={{
+            position: "absolute",
+            bottom: 16,
+            right: matches ? 16 : "50%",
+            transform: matches ? "none" : "translateX(50%)",
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.primary.main,
+            "&:hover": {
+              bgcolor: theme.palette.grey[300],
+            },
+          }}
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          <Home />
+        </Fab>
       </Box>
     </Box>
   );

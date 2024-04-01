@@ -1,15 +1,21 @@
+import { AddBox, Home, Logout } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import CustomSpeedDial, {
+  CustomSpeedDialActionModel,
+} from "../components/CustomSpeedDial";
 import PollWidget from "../components/PollWidget";
 import { Poll } from "../models/PollModels";
 import { useAppDispatch } from "../redux/hook";
+import { setLogout } from "../redux/reducers/AuthSlice";
 import { getPoll } from "../services/PollService";
 
 const PollForm = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [poll, setPoll] = useState<Poll>(undefined);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getPoll(id))
@@ -21,6 +27,30 @@ const PollForm = () => {
         console.log(err);
       });
   }, []);
+
+  const actions: CustomSpeedDialActionModel[] = [
+    {
+      icon: <Logout />,
+      name: "Logout",
+      onClick: () => {
+        dispatch(setLogout());
+      },
+    },
+    {
+      icon: <AddBox />,
+      name: "Create Poll",
+      onClick: () => {
+        navigate("/create-poll");
+      },
+    },
+    {
+      icon: <Home />,
+      name: "Home",
+      onClick: () => {
+        navigate("/home");
+      },
+    },
+  ];
 
   return (
     <Box
@@ -34,6 +64,7 @@ const PollForm = () => {
       <Box sx={{ width: "32rem" }}>
         {poll && <PollWidget initPoll={poll} removePoll={(id) => {}} />}
       </Box>
+      <CustomSpeedDial actions={actions} />
     </Box>
   );
 };
