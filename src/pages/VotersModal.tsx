@@ -28,9 +28,11 @@ import { getVoters } from "../services/PollService";
 
 const VotersModal = ({
   setIsOpen,
+  pollId,
   itemId,
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  pollId: string;
   itemId: string;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ const VotersModal = ({
     }
 
     setIsLoading(true);
-    dispatch(getVoters({ itemId, pageNumber }))
+    dispatch(getVoters({ pollId, itemId, pageNumber }))
       .unwrap()
       .then((res) => {
         if (res.length === 0) setHasMore(false);

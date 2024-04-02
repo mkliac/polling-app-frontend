@@ -194,6 +194,7 @@ export const closePoll = createAsyncThunk<
 });
 
 interface GetVotersModel {
+  pollId: string;
   itemId: string;
   pageNumber?: number;
   pageSize?: number;
@@ -207,7 +208,7 @@ export const getVoters = createAsyncThunk<
   let data: User[] = [];
   try {
     const voters = await getApi(
-      POLL_URI + `/items/${request.itemId}/voters`,
+      POLL_URI + `/${request.pollId}/items/${request.itemId}/voters`,
       request
     );
     data = voters.map((voter: User) => {

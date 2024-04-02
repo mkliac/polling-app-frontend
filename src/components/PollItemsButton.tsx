@@ -1,4 +1,4 @@
-import { Visibility } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -96,13 +96,24 @@ const PollItemsButton = ({
                 </Box>
               </FlexBetween>
             </Button>
-            <IconButton onClick={() => openView(item.id)}>
-              <Visibility fontSize="small" />
+            <IconButton
+              disabled={poll.anonymous}
+              onClick={() => openView(item.id)}
+            >
+              {poll.anonymous ? (
+                <VisibilityOff fontSize="small" />
+              ) : (
+                <Visibility fontSize="small" />
+              )}
             </IconButton>
             {viewItemId === item.id && (
               <Modal open={isOpenView}>
                 <Box>
-                  <VotersModal setIsOpen={setIsOpenView} itemId={item.id} />
+                  <VotersModal
+                    setIsOpen={setIsOpenView}
+                    pollId={poll.id}
+                    itemId={item.id}
+                  />
                 </Box>
               </Modal>
             )}

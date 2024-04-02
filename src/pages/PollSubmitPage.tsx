@@ -48,8 +48,8 @@ const PollSubmitForm = () => {
     title: "",
     description: "",
     items: [],
-    isPrivate: false,
-    isAnonymous: false,
+    private: false,
+    anonymous: false,
     closedDate: undefined,
   });
   const [open, setOpen] = useState(false);
@@ -88,11 +88,11 @@ const PollSubmitForm = () => {
   };
 
   const setPrivate = (isPrivate: boolean) => {
-    setRequest({ ...request, isPrivate: isPrivate });
+    setRequest({ ...request, private: isPrivate });
   };
 
   const setAnonymous = (isAnonymous: boolean) => {
-    setRequest({ ...request, isAnonymous: isAnonymous });
+    setRequest({ ...request, anonymous: isAnonymous });
   };
 
   const removeItem = (index) => {
@@ -304,10 +304,9 @@ const PollSubmitForm = () => {
                     padding="0rem 2rem"
                   >
                     <FormControlLabel
-                      checked={request.isPrivate}
+                      checked={request.private}
                       control={
                         <Switch
-                          disabled
                           onChange={(e) => {
                             setPrivate(e.target.checked);
                           }}
@@ -316,10 +315,9 @@ const PollSubmitForm = () => {
                       label="Private"
                     />
                     <FormControlLabel
-                      checked={request.isAnonymous}
+                      checked={request.anonymous}
                       control={
                         <Switch
-                          disabled
                           onChange={(e) => {
                             setAnonymous(e.target.checked);
                           }}

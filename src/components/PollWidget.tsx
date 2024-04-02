@@ -5,7 +5,7 @@ import {
   EventBusy,
   ModeEdit,
   MoreHoriz,
-  Share
+  Share,
 } from "@mui/icons-material";
 import {
   Box,
@@ -17,7 +17,7 @@ import {
   Menu,
   MenuItem,
   Modal,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -55,7 +55,7 @@ const PollWidget = ({
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const isPollOwner =
-    poll.createdBy !== undefined && poll.createdBy.email === user.email;
+    poll.createdBy !== null && poll.createdBy.email === user.email;
   const [isSaved, setIsSaved] = useState(initPoll.bookmarked);
 
   const [searchParams, setSearchParams] = useSearchParams();

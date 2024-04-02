@@ -4,9 +4,9 @@ export interface SavePollRequest {
   title: string;
   description: string;
   items: string[];
-  isPrivate: boolean;
+  private: boolean;
   closedDate: Date;
-  isAnonymous: boolean;
+  anonymous: boolean;
 }
 
 export interface AddPollItemsRequest {
