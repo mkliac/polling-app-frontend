@@ -31,6 +31,7 @@ export interface Poll {
   items: PollItem[];
   anonymous: boolean;
   private: boolean;
+  owner: boolean;
   createdAt: Date;
   createdBy: User;
   closedDate: Date;

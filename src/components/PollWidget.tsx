@@ -54,8 +54,6 @@ const PollWidget = ({
   const isOptionClick = Boolean(anchorEl);
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const isPollOwner =
-    poll.createdBy !== null && poll.createdBy.email === user.email;
   const [isSaved, setIsSaved] = useState(initPoll.bookmarked);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -129,12 +127,12 @@ const PollWidget = ({
               onClose={handleOptionClose}
               disableScrollLock={true}
             >
-              <MenuItem disabled={!isPollOwner}>
+              <MenuItem disabled={!poll.owner}>
                 <ModeEdit />
                 Edit
               </MenuItem>
               <MenuItem
-                disabled={!isPollOwner}
+                disabled={!poll.owner}
                 onClick={() => {
                   dispatch(closePoll(poll.id))
                     .unwrap()
@@ -146,7 +144,7 @@ const PollWidget = ({
                 Close
               </MenuItem>
               <MenuItem
-                disabled={!isPollOwner}
+                disabled={!poll.owner}
                 onClick={() => {
                   dispatch(deletePoll(poll.id))
                     .unwrap()
