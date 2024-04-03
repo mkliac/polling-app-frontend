@@ -225,7 +225,7 @@ const PollSubmitForm = () => {
                   )}
                 />
               </>
-            ) : activeStep == 1 ? (
+            ) : activeStep === 1 ? (
               <>
                 <Typography textAlign="left" variant="h6">
                   Options
@@ -332,7 +332,7 @@ const PollSubmitForm = () => {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       value={
-                        request.closedDate == undefined
+                        request.closedDate === undefined
                           ? null
                           : dayjs(request.closedDate)
                       }

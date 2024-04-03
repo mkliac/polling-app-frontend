@@ -1,11 +1,9 @@
-import { Box, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import MenuBar from "../components/MenuBar";
 import NavBar from "../components/NavBar";
 import PollsWidget from "../components/PollsWidget";
 
 const HomePage = () => {
-  const theme = useTheme();
-
   return (
     <Box width="100%" height="100%">
       <Box position="sticky" width="100%" zIndex={1} sx={{ top: "0" }}>
