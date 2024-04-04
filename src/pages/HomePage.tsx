@@ -1,9 +1,19 @@
-import { Box } from "@mui/material";
+import { KeyboardArrowUp } from "@mui/icons-material";
+import { Box, Fab, useTheme } from "@mui/material";
 import MenuBar from "../components/MenuBar";
 import NavBar from "../components/NavBar";
 import PollsWidget from "../components/PollsWidget";
 
 const HomePage = () => {
+  const theme = useTheme();
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <Box width="100%" height="100%">
       <Box position="sticky" width="100%" zIndex={1} sx={{ top: "0" }}>
@@ -25,6 +35,22 @@ const HomePage = () => {
           <PollsWidget />
         </Box>
       </Box>
+      <Fab
+        size="small"
+        sx={{
+          position: "fixed",
+          bottom: "3%",
+          right: "3%",
+          bgcolor: theme.palette.background.paper,
+          color: theme.palette.primary.main,
+          "&:hover": {
+            bgcolor: theme.palette.grey[300],
+          },
+        }}
+        onClick={scrollToTop}
+      >
+        <KeyboardArrowUp />
+      </Fab>
     </Box>
   );
 };

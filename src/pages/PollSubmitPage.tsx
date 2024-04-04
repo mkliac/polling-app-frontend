@@ -388,8 +388,8 @@ const PollSubmitForm = () => {
         <Fab
           sx={{
             position: "absolute",
-            bottom: 16,
-            right: matches ? 16 : "50%",
+            bottom: "3rem",
+            right: matches ? "3rem" : "50%",
             transform: matches ? "none" : "translateX(50%)",
             bgcolor: theme.palette.background.paper,
             color: theme.palette.primary.main,

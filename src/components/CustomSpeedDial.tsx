@@ -1,9 +1,9 @@
 import {
-    SpeedDial,
-    SpeedDialAction,
-    SpeedDialIcon,
-    useMediaQuery,
-    useTheme,
+  SpeedDial,
+  SpeedDialAction,
+  SpeedDialIcon,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { ReactNode } from "react";
 
@@ -26,8 +26,8 @@ const CustomSpeedDial = ({
       ariaLabel="SpeedDial basic example"
       sx={{
         position: "absolute",
-        bottom: 16,
-        right: matches ? 16 : "50%",
+        bottom: "3rem",
+        right: matches ? "3rem" : "50%",
         transform: matches ? "none" : "translateX(50%)",
       }}
       icon={<SpeedDialIcon />}
