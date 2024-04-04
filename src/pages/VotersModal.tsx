@@ -108,7 +108,7 @@ const VotersModal = ({
             }}
           >
             {voters.map((user, index) =>
-              voters.length === index + 1 ? (
+              voters.length <= index + 2 ? (
                 <div ref={lastBookElementRef} key={user.email}>
                   <ListItem>
                     <ListItemAvatar>

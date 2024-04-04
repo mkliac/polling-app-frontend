@@ -23,7 +23,7 @@ const PollsWidget = () => {
   const searchUserId = searchParams.get("userId");
 
   const fetchPolls = (pageNumber: number) => {
-    dispatch(getPolls({ search, filterType, pageNumber, userId: searchUserId }))
+    dispatch(getPolls({ search, filterType, pageNumber, userId: searchUserId}))
       .unwrap()
       .then((res) => {
         if (res.length === 0) setHasMore(() => false);
@@ -66,7 +66,7 @@ const PollsWidget = () => {
   return (
     <>
       {polls.map((poll, index) =>
-        polls.length === index + 1 ? (
+        polls.length <= index + 2 ? (
           <div ref={lastBookElementRef} key={poll.id}>
             <PollWidget initPoll={poll} removePoll={removePoll} />
           </div>

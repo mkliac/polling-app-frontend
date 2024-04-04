@@ -7,7 +7,10 @@ const ProtectedRoute = () => {
   const prevLocation = useLocation();
 
   if (!isLoggedIn) {
-    sessionStorage.setItem("redirect", prevLocation.pathname);
+    sessionStorage.setItem(
+      "redirect",
+      prevLocation.pathname + prevLocation.search
+    );
     return <Navigate to="/" />;
   }
   return <Outlet />;
