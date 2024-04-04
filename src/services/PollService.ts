@@ -10,15 +10,6 @@ import { User } from "../models/UserModel";
 import { RequestError } from "../types/ApiStatusType";
 import { deleteApi, getApi, postApi } from "../utils/api";
 
-interface GetPollsModel {
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: string;
-  isAscending?: boolean;
-  filterType?: PollFitlerType;
-  search?: string;
-}
-
 const POLL_URI = "/polls";
 export const getPoll = createAsyncThunk<
   Poll,
@@ -40,14 +31,25 @@ export const getPoll = createAsyncThunk<
   return data;
 });
 
+interface GetPollsModel {
+  userId?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  isAscending?: boolean;
+  filterType?: PollFitlerType;
+  search?: string;
+}
+
 export const getPolls = createAsyncThunk<
   Poll[],
   GetPollsModel,
   { rejectValue: RequestError }
->("polls/getPolls", async (page: GetPollsModel, thunkAPI) => {
+>("polls/getPolls", async (request: GetPollsModel, thunkAPI) => {
   let data: Poll[] = [];
   try {
-    const polls = await getApi(POLL_URI, page);
+    const uri = POLL_URI + (request.userId ? `/users/${request.userId}` : "");
+    const polls = await getApi(uri, request);
     data = polls.map((poll: Poll) => {
       return {
         ...poll,

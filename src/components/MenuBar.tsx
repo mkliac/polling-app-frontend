@@ -31,6 +31,7 @@ const MenuBar = () => {
       (prev) => {
         prev.set("filterType", filterType);
         prev.set("search", "");
+        prev.set("userId", "");
         return prev;
       },
       { replace: true }
@@ -47,7 +48,7 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
-        onClick={() => onSelect(PollFilter.ALL)}
+        onClick={() => onSelect(PollFilter.PUBLIC)}
       >
         <ListItemIcon>
           <Window />
@@ -62,7 +63,7 @@ const MenuBar = () => {
             transition: "0.05s",
           },
         }}
-        onClick={() => onSelect(PollFilter.USER)}
+        onClick={() => onSelect(PollFilter.MY_POLLS)}
       >
         <ListItemIcon>
           <FolderOpen />

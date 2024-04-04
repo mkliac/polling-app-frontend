@@ -39,12 +39,14 @@ export interface Poll {
 }
 
 export enum PollFilter {
-  ALL = "ALL",
+  PUBLIC = "PUBLIC",
+  MY_POLLS = "MY_POLLS",
   USER = "USER",
   BOOKMARKED = "BOOKMARKED",
 }
 
 export type PollFitlerType =
-  | PollFilter.ALL
+  | PollFilter.PUBLIC
+  | PollFilter.MY_POLLS
   | PollFilter.USER
   | PollFilter.BOOKMARKED;

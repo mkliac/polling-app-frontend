@@ -24,7 +24,7 @@ const NavBar = () => {
   const dispatch = useAppDispatch();
   const matches = useMediaQuery("(min-width:750px)");
   const [searchParams, setSearchParams] = useSearchParams({
-    filterType: PollFilter.ALL,
+    filterType: PollFilter.PUBLIC,
     search: "",
   });
   const [inputSearch, setInputSearch] = useState(

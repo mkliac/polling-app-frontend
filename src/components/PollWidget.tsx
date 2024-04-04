@@ -83,10 +83,32 @@ const PollWidget = ({
     setAnchorEl(null);
   };
 
+  const onAvatarClick = () => {
+    if (!poll.createdBy) return;
+
+    setSearchParams(
+      (prev) => {
+        prev.set("filterType", PollFilter.USER);
+        prev.set("search", "");
+        prev.set("userId", poll.createdBy.email);
+        return prev;
+      },
+      { replace: true }
+    );
+  };
+
   return (
     <Card sx={{ position: "relative", margin: "0.75rem 0" }}>
       <CardHeader
-        avatar={<CustomAvatar src={poll.createdBy?.picture} />}
+        avatar={
+          <IconButton
+            disabled={!poll.createdBy}
+            onClick={onAvatarClick}
+            sx={{ padding: "0", margin: "0" }}
+          >
+            <CustomAvatar src={poll.createdBy?.picture} />
+          </IconButton>
+        }
         title={
           <div
             style={{

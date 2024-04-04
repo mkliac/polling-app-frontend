@@ -20,13 +20,10 @@ const PollsWidget = () => {
   const [hasMore, setHasMore] = useState(true);
   const search = searchParams.get("search");
   const filterType = searchParams.get("filterType") as PollFitlerType;
+  const searchUserId = searchParams.get("userId");
 
-  const fetchPolls = (
-    search: string,
-    filterType: PollFitlerType,
-    pageNumber: number
-  ) => {
-    dispatch(getPolls({ search, filterType, pageNumber }))
+  const fetchPolls = (pageNumber: number) => {
+    dispatch(getPolls({ search, filterType, pageNumber, userId: searchUserId }))
       .unwrap()
       .then((res) => {
         if (res.length === 0) setHasMore(() => false);
@@ -35,7 +32,7 @@ const PollsWidget = () => {
   };
   useEffect(() => {
     setPageNumber(-1);
-  }, [search, filterType]);
+  }, [search, filterType, searchUserId]);
 
   useEffect(() => {
     if (pageNumber === -1) {
@@ -44,7 +41,7 @@ const PollsWidget = () => {
       setHasMore(() => true);
       return;
     }
-    fetchPolls(search, filterType, pageNumber);
+    fetchPolls(pageNumber);
   }, [pageNumber]);
 
   const observer = useRef<any>();
