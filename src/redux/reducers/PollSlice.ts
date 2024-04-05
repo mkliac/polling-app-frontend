@@ -2,16 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import { Poll } from "../../models/PollModels";
 import {
-  addPollItems,
   bookmark,
   closePoll,
   deletePoll,
-  deletePollItems,
   getPoll,
   getPolls,
   getVoters,
   savePoll,
-  updatePollItem,
+  updatePoll,
   vote,
 } from "../../services/PollService";
 import { APIStatus, APIStatusType } from "../../types/ApiStatusType";
@@ -20,6 +18,7 @@ type PollState = {
   poll: Poll;
   getPollsStatus: APIStatusType;
   submitStatus: APIStatusType;
+  updateStatus: APIStatusType;
   error: string | null;
 };
 
@@ -27,6 +26,7 @@ const initialState: PollState = {
   poll: null,
   getPollsStatus: APIStatus.IDLE,
   submitStatus: APIStatus.IDLE,
+  updateStatus: APIStatus.IDLE,
   error: null,
 };
 
@@ -36,6 +36,9 @@ export const pollDataSlice = createSlice({
   reducers: {
     resetSubmitStatus: (state) => {
       state.submitStatus = APIStatus.IDLE;
+    },
+    resetUpdateStatus: (state) => {
+      state.updateStatus = APIStatus.IDLE;
     },
   },
 
@@ -77,33 +80,25 @@ export const pollDataSlice = createSlice({
       state.error = payload.message;
     });
 
+    builder.addCase(updatePoll.pending, (state) => {
+      state.updateStatus = APIStatus.LOADING;
+      state.error = null;
+    });
+
+    builder.addCase(updatePoll.fulfilled, (state, { payload }) => {
+      state.updateStatus = APIStatus.SUCCESS;
+    });
+
+    builder.addCase(updatePoll.rejected, (state, { payload }) => {
+      state.updateStatus = APIStatus.ERROR;
+      state.error = payload.message;
+    });
+
     builder.addCase(deletePoll.pending, (state) => {});
 
     builder.addCase(deletePoll.fulfilled, (state) => {});
 
     builder.addCase(deletePoll.rejected, (state, { payload }) => {});
-
-    builder.addCase(addPollItems.pending, (state) => {});
-
-    builder.addCase(addPollItems.fulfilled, (state, { payload }) => {
-      state.poll = { ...payload };
-    });
-
-    builder.addCase(addPollItems.rejected, (state, { payload }) => {});
-
-    builder.addCase(deletePollItems.pending, (state) => {});
-
-    builder.addCase(deletePollItems.fulfilled, (state, { payload }) => {
-      state.poll = { ...payload };
-    });
-
-    builder.addCase(deletePollItems.rejected, (state, { payload }) => {});
-
-    builder.addCase(updatePollItem.pending, (state) => {});
-
-    builder.addCase(updatePollItem.fulfilled, (state, { payload }) => {});
-
-    builder.addCase(updatePollItem.rejected, (state, { payload }) => {});
 
     builder.addCase(vote.pending, (state) => {});
 
@@ -133,7 +128,10 @@ export const pollDataSlice = createSlice({
 
 export const selectPoll = (state: RootState) => state.poll.poll;
 export const selectPollStatus = (state: RootState) => state.poll.getPollsStatus;
-export const selectSubmitStatus = (state: RootState) => state.poll.submitStatus;
+export const selectSubmitPollStatus = (state: RootState) =>
+  state.poll.submitStatus;
+export const selectUpdatePollStatus = (state: RootState) =>
+  state.poll.updateStatus;
 export const selectPollError = (state: RootState) => state.poll.error;
-export const { resetSubmitStatus } = pollDataSlice.actions;
+export const { resetSubmitStatus, resetUpdateStatus } = pollDataSlice.actions;
 export default pollDataSlice.reducer;

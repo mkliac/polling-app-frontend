@@ -1,10 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  AddPollItemsRequest,
-  DeletePollItemsRequest,
+  BookmarkRequest,
+  GetPollsRequest,
+  GetVotersRequest,
   Poll,
-  PollFitlerType,
   SavePollRequest,
+  UpdatePollRequest,
 } from "../models/PollModels";
 import { User } from "../models/UserModel";
 import { RequestError } from "../types/ApiStatusType";
@@ -31,21 +32,11 @@ export const getPoll = createAsyncThunk<
   return data;
 });
 
-interface GetPollsModel {
-  userId?: string;
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: string;
-  isAscending?: boolean;
-  filterType?: PollFitlerType;
-  search?: string;
-}
-
 export const getPolls = createAsyncThunk<
   Poll[],
-  GetPollsModel,
+  GetPollsRequest,
   { rejectValue: RequestError }
->("polls/getPolls", async (request: GetPollsModel, thunkAPI) => {
+>("polls/getPolls", async (request: GetPollsRequest, thunkAPI) => {
   let data: Poll[] = [];
   try {
     const uri = POLL_URI + (request.userId ? `/users/${request.userId}` : "");
@@ -81,6 +72,24 @@ export const savePoll = createAsyncThunk<
   return data;
 });
 
+export const updatePoll = createAsyncThunk<
+  Poll,
+  UpdatePollRequest,
+  { rejectValue: RequestError }
+>("polls/updatePoll", async (reqBody: UpdatePollRequest, thunkAPI) => {
+  let data: Poll = null;
+  try {
+    const poll = await postApi(POLL_URI + `/${reqBody.id}`, reqBody);
+    data = {
+      ...poll,
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ message: error.response.data.message });
+  }
+
+  return data;
+});
+
 export const deletePoll = createAsyncThunk<
   void,
   string,
@@ -93,68 +102,6 @@ export const deletePoll = createAsyncThunk<
       message: error.response.data.message,
     });
   }
-});
-
-export const addPollItems = createAsyncThunk<
-  Poll,
-  { id: string; reqBody: AddPollItemsRequest },
-  { rejectValue: RequestError }
->("polls/addPollItems", async ({ id, reqBody }, thunkAPI) => {
-  let data: Poll = null;
-  try {
-    const poll = await postApi(POLL_URI + `/${id}/items`, reqBody);
-    data = {
-      ...poll,
-    };
-  } catch (error) {
-    return thunkAPI.rejectWithValue({
-      message: error.response.data.message,
-    });
-  }
-
-  return data;
-});
-
-export const deletePollItems = createAsyncThunk<
-  Poll,
-  { id: string; reqBody: DeletePollItemsRequest },
-  { rejectValue: RequestError }
->("polls/deletePollItems", async ({ id, reqBody }, thunkAPI) => {
-  let data: Poll = null;
-  try {
-    const poll = await deleteApi(POLL_URI + `/${id}/items`, reqBody);
-    data = {
-      ...poll,
-    };
-  } catch (error) {
-    return thunkAPI.rejectWithValue({
-      message: error.response.data.message,
-    });
-  }
-
-  return data;
-});
-
-export const updatePollItem = createAsyncThunk<
-  Poll,
-  { id: string; itemId: string; text: string },
-  { rejectValue: RequestError }
->("polls/updatePollItem", async ({ id, itemId, text }, thunkAPI) => {
-  let data: Poll = null;
-  try {
-    const poll = await postApi(POLL_URI + `/${id}/items/${itemId}`, null, {
-      text,
-    });
-    data = {
-      ...poll,
-    };
-  } catch (error) {
-    return thunkAPI.rejectWithValue({
-      message: error.response.data.message,
-    });
-  }
-
-  return data;
 });
 
 export const vote = createAsyncThunk<
@@ -195,18 +142,11 @@ export const closePoll = createAsyncThunk<
   return data;
 });
 
-interface GetVotersModel {
-  pollId: string;
-  itemId: string;
-  pageNumber?: number;
-  pageSize?: number;
-}
-
 export const getVoters = createAsyncThunk<
   User[],
-  GetVotersModel,
+  GetVotersRequest,
   { rejectValue: RequestError }
->("polls/getVoters", async (request: GetVotersModel, thunkAPI) => {
+>("polls/getVoters", async (request: GetVotersRequest, thunkAPI) => {
   let data: User[] = [];
   try {
     const voters = await getApi(
@@ -227,16 +167,11 @@ export const getVoters = createAsyncThunk<
   return data;
 });
 
-interface BookmarkModel {
-  pollId: string;
-  isBookmark: boolean;
-}
-
 export const bookmark = createAsyncThunk<
   void,
-  BookmarkModel,
+  BookmarkRequest,
   { rejectValue: RequestError }
->("polls/bookmark", async (request: BookmarkModel, thunkAPI) => {
+>("polls/bookmark", async (request: BookmarkRequest, thunkAPI) => {
   try {
     await postApi(POLL_URI + `/${request.pollId}/bookmark`, null, request);
   } catch (error) {

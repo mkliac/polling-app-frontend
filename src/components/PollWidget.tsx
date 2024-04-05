@@ -27,13 +27,14 @@ import {
   PollFitlerType,
   PollItem,
 } from "../models/PollModels";
+import EditPollModal from "../pages/EditPollModal";
 import PollShareModal from "../pages/PollShareModal";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
 import { bookmark, closePoll, deletePoll, vote } from "../services/PollService";
 import { formatRelativeTime } from "../utils/TextUtil";
 import CustomAvatar from "./CustomAvatar";
-import ErrorSnackbar from "./ErrorSnackbar";
+import CustomSnackbar from "./CustomSnackbar";
 import ExpireAlarm from "./ExpireAlarm";
 import LoadingContent from "./LoadingContent";
 import PollItemsButton from "./PollItemsButton";
@@ -55,9 +56,9 @@ const PollWidget = ({
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const [isSaved, setIsSaved] = useState(initPoll.bookmarked);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const filterType = searchParams.get("filterType") as PollFitlerType;
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const onVote = (item: PollItem) => {
     setIsLoading(true);
@@ -95,6 +96,11 @@ const PollWidget = ({
       },
       { replace: true }
     );
+  };
+
+  const openEditModal = () => {
+    setIsEditModalOpen(true);
+    handleOptionClose();
   };
 
   return (
@@ -149,7 +155,7 @@ const PollWidget = ({
               onClose={handleOptionClose}
               disableScrollLock={true}
             >
-              <MenuItem disabled={!poll.owner}>
+              <MenuItem disabled={!poll.owner} onClick={openEditModal}>
                 <ModeEdit />
                 Edit
               </MenuItem>
@@ -200,7 +206,7 @@ const PollWidget = ({
         </Typography>
         <PollItemsButton poll={poll} onVote={onVote} />
         {isLoading && <LoadingContent />}
-        <ErrorSnackbar
+        <CustomSnackbar
           isTriggered={isError}
           setOpen={setIsError}
           message={errorMsg}
@@ -227,6 +233,15 @@ const PollWidget = ({
       <Modal open={isShare} onClose={() => setIsShare(false)}>
         <Box>
           <PollShareModal id={poll.id} />
+        </Box>
+      </Modal>
+      <Modal open={isEditModalOpen}>
+        <Box>
+          <EditPollModal
+            poll={poll}
+            setPoll={setPoll}
+            onClose={() => setIsEditModalOpen(false)}
+          />
         </Box>
       </Modal>
     </Card>

@@ -24,8 +24,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CustomSnackbar from "../components/CustomSnackbar";
 import CustomTextField from "../components/CustomTextField";
-import ErrorSnackbar from "../components/ErrorSnackbar";
 import FlexBetween from "../components/FlexBwtween";
 import LoadingContent from "../components/LoadingContent";
 import { Poll, SavePollRequest } from "../models/PollModels";
@@ -35,7 +35,7 @@ import {
   resetSubmitStatus,
   selectPoll,
   selectPollError,
-  selectSubmitStatus,
+  selectSubmitPollStatus,
 } from "../redux/reducers/PollSlice";
 import { savePoll } from "../services/PollService";
 import { APIStatus } from "../types/ApiStatusType";
@@ -57,7 +57,7 @@ const PollSubmitForm = () => {
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Descriptions", "Poll Items", "Poll Settings"];
   const poll: Poll = useAppSelector(selectPoll);
-  const status = useAppSelector(selectSubmitStatus);
+  const status = useAppSelector(selectSubmitPollStatus);
   const error = useAppSelector(selectPollError);
   const [id, setId] = useState("");
   const dispatch = useAppDispatch();
@@ -110,7 +110,7 @@ const PollSubmitForm = () => {
   };
 
   const submitRequest = (request: SavePollRequest) => {
-    request.items = items;
+    request.items = items.filter((item) => item !== "");
     dispatch(savePoll(request));
   };
 
@@ -140,7 +140,7 @@ const PollSubmitForm = () => {
         backgroundColor: theme.palette.background.default,
       }}
     >
-      <ErrorSnackbar
+      <CustomSnackbar
         isTriggered={showError}
         setOpen={setShowError}
         message={error}

@@ -9,12 +9,35 @@ export interface SavePollRequest {
   anonymous: boolean;
 }
 
-export interface AddPollItemsRequest {
-  texts: string[];
+export interface UpdatePollRequest {
+  id: string;
+  title: string;
+  description: string;
+  removeItemIds: string[];
+  addItemTexts: string[];
+  closedDate: Date;
 }
 
-export interface DeletePollItemsRequest {
-  ids: string[];
+export interface GetPollsRequest {
+  userId?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  isAscending?: boolean;
+  filterType?: PollFitlerType;
+  search?: string;
+}
+
+export interface GetVotersRequest {
+  pollId: string;
+  itemId: string;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
+export interface BookmarkRequest {
+  pollId: string;
+  isBookmark: boolean;
 }
 
 export interface PollItem {
