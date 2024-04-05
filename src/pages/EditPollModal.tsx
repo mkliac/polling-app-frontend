@@ -122,7 +122,7 @@ const EditPollModal = ({
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: matches ? "40rem" : "98%",
+        width: matches ? "40rem" : "95%",
       }}
     >
       <Card
@@ -135,7 +135,7 @@ const EditPollModal = ({
         <CardContent
           sx={{
             width: "100%",
-            height: "80vh",
+            height: "70vh",
             overflow: "auto",
             scrollbarGutter: "stable",
           }}
