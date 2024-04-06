@@ -155,10 +155,12 @@ const FollowDrawer = () => {
               <div ref={lastBookElementRef} key={user.email}>
                 <ListItem>
                   <ListItemAvatar>
-                    <CustomAvatar
-                      src={user.picture}
+                    <IconButton
+                      sx={{ padding: "0", margin: "0" }}
                       onClick={() => onAvatarClick(user.email)}
-                    />
+                    >
+                      <CustomAvatar src={user.picture} />
+                    </IconButton>
                   </ListItemAvatar>
                   <ListItemText
                     primary={user.username}
@@ -174,10 +176,12 @@ const FollowDrawer = () => {
             ) : (
               <ListItem key={user.email}>
                 <ListItemAvatar>
-                  <CustomAvatar
-                    src={user.picture}
+                  <IconButton
+                    sx={{ padding: "0", margin: "0" }}
                     onClick={() => onAvatarClick(user.email)}
-                  />
+                  >
+                    <CustomAvatar src={user.picture} />
+                  </IconButton>
                 </ListItemAvatar>
                 <ListItemText primary={user.username} secondary={user.email} />
                 {user.email !== currentUser.email && (

@@ -28,8 +28,7 @@ import {
   PollItem,
 } from "../models/PollModels";
 import PollShareModal from "../pages/PollShareModal";
-import { useAppDispatch, useAppSelector } from "../redux/hook";
-import { selectUser } from "../redux/reducers/AuthSlice";
+import { useAppDispatch } from "../redux/hook";
 import { bookmark, closePoll, deletePoll, vote } from "../services/PollService";
 import { formatRelativeTime } from "../utils/TextUtil";
 import CustomAvatar from "./CustomAvatar";
