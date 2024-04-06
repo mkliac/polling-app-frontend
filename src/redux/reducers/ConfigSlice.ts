@@ -6,6 +6,8 @@ import { cacheAppConfig } from "../../services/AppConfigService";
 interface ConfigState {
   appConfig: AppConfig;
   isSideBarExtended: boolean;
+  isFollowDrawerOpen: boolean;
+  isShownFollower: boolean;
 }
 
 const initialState: ConfigState = {
@@ -19,6 +21,8 @@ const initialState: ConfigState = {
     },
   },
   isSideBarExtended: false,
+  isFollowDrawerOpen: false,
+  isShownFollower: false,
 };
 
 export const configSlice = createSlice({
@@ -31,6 +35,15 @@ export const configSlice = createSlice({
     setSideBar: (state, action) => {
       state.isSideBarExtended = action.payload;
     },
+    toggleFollowDrawer: (state) => {
+      state.isFollowDrawerOpen = !state.isFollowDrawerOpen;
+    },
+    setFollowDrawer: (state, action) => {
+      state.isFollowDrawerOpen = action.payload;
+    },
+    setIsShownFollower: (state, action) => {
+      state.isShownFollower = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(cacheAppConfig.fulfilled, (state, { payload }) => {
@@ -42,8 +55,18 @@ export const configSlice = createSlice({
   },
 });
 
-export const { toggleSideBar, setSideBar } = configSlice.actions;
+export const {
+  toggleSideBar,
+  setSideBar,
+  toggleFollowDrawer,
+  setFollowDrawer,
+  setIsShownFollower,
+} = configSlice.actions;
 export const selectAppConfig = (state: RootState) => state.config.appConfig;
 export const selectSideBar = (state: RootState) =>
   state.config.isSideBarExtended;
+export const selectFollowDrawer = (state: RootState) =>
+  state.config.isFollowDrawerOpen;
+export const selectIsShownFollower = (state: RootState) =>
+  state.config.isShownFollower;
 export default configSlice.reducer;

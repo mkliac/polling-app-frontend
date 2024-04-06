@@ -1,6 +1,7 @@
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, Fab, useTheme } from "@mui/material";
+import { Box, Fab, useMediaQuery, useTheme } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
+import FollowDrawer from "../components/FollowDrawer";
 import MenuBar from "../components/MenuBar";
 import NavBar from "../components/NavBar";
 import PollsWidget from "../components/PollsWidget";
@@ -15,6 +16,7 @@ const HomePage = () => {
   const searchUserId = searchParams.get("userId");
   const filterType = searchParams.get("filterType");
   const systemUserId = useAppSelector(selectUser).email;
+  const matches = useMediaQuery("(min-width:1800px)");
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -37,13 +39,17 @@ const HomePage = () => {
           display: "flex",
           flexWrap: "wrap",
           padding: "0",
-          gap: "5%",
+          gap: "3%",
           justifyContent: "center",
         }}
       >
         {(filterType === PollFilter.MY_POLLS ||
           filterType === PollFilter.USER) && (
-          <Box width="32rem">
+          <Box
+            width="32rem"
+            position={matches ? "absolute" : "relative"}
+            left={matches ? "5rem" : "0"}
+          >
             <UserInfoWidget
               userId={
                 filterType === PollFilter.MY_POLLS ? systemUserId : searchUserId
@@ -71,6 +77,7 @@ const HomePage = () => {
       >
         <KeyboardArrowUp />
       </Fab>
+      <FollowDrawer />
     </Box>
   );
 };

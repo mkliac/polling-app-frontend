@@ -27,7 +27,6 @@ import {
   PollFitlerType,
   PollItem,
 } from "../models/PollModels";
-import EditPollModal from "../pages/EditPollModal";
 import PollShareModal from "../pages/PollShareModal";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
@@ -35,6 +34,7 @@ import { bookmark, closePoll, deletePoll, vote } from "../services/PollService";
 import { formatRelativeTime } from "../utils/TextUtil";
 import CustomAvatar from "./CustomAvatar";
 import CustomSnackbar from "./CustomSnackbar";
+import EditPollModal from "./EditPollModal";
 import ExpireAlarm from "./ExpireAlarm";
 import LoadingContent from "./LoadingContent";
 import PollItemsButton from "./PollItemsButton";
@@ -54,7 +54,6 @@ const PollWidget = ({
   const [isShare, setIsShare] = useState(false);
   const isOptionClick = Boolean(anchorEl);
   const dispatch = useAppDispatch();
-  const user = useAppSelector(selectUser);
   const [isSaved, setIsSaved] = useState(initPoll.bookmarked);
   const [searchParams, setSearchParams] = useSearchParams();
   const filterType = searchParams.get("filterType") as PollFitlerType;

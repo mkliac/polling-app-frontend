@@ -1,37 +1,37 @@
 import { Add, Cancel, Delete, Remove, Save } from "@mui/icons-material";
 import {
-    Box,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    FormControlLabel,
-    IconButton,
-    Stack,
-    Switch,
-    TextField,
-    Typography,
-    useMediaQuery,
-    useTheme,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  FormControlLabel,
+  IconButton,
+  Stack,
+  Switch,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
-import CustomSnackbar from "../components/CustomSnackbar";
-import CustomTextField from "../components/CustomTextField";
-import LoadingContent from "../components/LoadingContent";
 import { Poll } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectAppConfig } from "../redux/reducers/ConfigSlice";
 import {
-    resetUpdateStatus,
-    selectPollError,
-    selectUpdatePollStatus,
+  resetUpdateStatus,
+  selectPollError,
+  selectUpdatePollStatus,
 } from "../redux/reducers/PollSlice";
 import { updatePoll } from "../services/PollService";
 import { APIStatus } from "../types/ApiStatusType";
 import { getHelperText, isTextValid } from "../utils/TextUtil";
+import CustomSnackbar from "./CustomSnackbar";
+import CustomTextField from "./CustomTextField";
+import LoadingContent from "./LoadingContent";
 
 const EditPollModal = ({
   poll,

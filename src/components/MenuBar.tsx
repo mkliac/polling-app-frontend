@@ -12,6 +12,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { PollFilter, PollFitlerType } from "../models/PollModels";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { selectUser } from "../redux/reducers/AuthSlice";
 import {
   selectSideBar,
   setSideBar,
@@ -25,13 +26,14 @@ const MenuBar = () => {
   const dispatch = useAppDispatch();
   const matches = useMediaQuery("(min-width:750px)");
   const [searchParams, setSearchParams] = useSearchParams();
+  const user = useAppSelector(selectUser);
 
   const onSelect = (filterType: PollFitlerType) => {
     setSearchParams(
       (prev) => {
         prev.set("filterType", filterType);
         prev.set("search", "");
-        prev.set("userId", "");
+        prev.set("userId", user.email);
         return prev;
       },
       { replace: true }

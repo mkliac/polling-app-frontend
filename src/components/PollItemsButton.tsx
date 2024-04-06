@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Poll, PollItem } from "../models/PollModels";
-import VotersModal from "../pages/VotersModal";
 import FlexBetween from "./FlexBwtween";
+import VotersModal from "./VotersModal";
 
 const PollItemsButton = ({
   poll,

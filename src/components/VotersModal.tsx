@@ -20,11 +20,13 @@ import {
   useRef,
   useState,
 } from "react";
-import CustomAvatar from "../components/CustomAvatar";
-import LoadingContent from "../components/LoadingContent";
+import { useSearchParams } from "react-router-dom";
+import { PollFilter } from "../models/PollModels";
 import { User } from "../models/UserModel";
 import { useAppDispatch } from "../redux/hook";
 import { getVoters } from "../services/PollService";
+import CustomAvatar from "./CustomAvatar";
+import LoadingContent from "./LoadingContent";
 
 const VotersModal = ({
   setIsOpen,
@@ -40,6 +42,7 @@ const VotersModal = ({
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState(-1);
   const [hasMore, setHasMore] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     if (pageNumber === -1) {
@@ -79,6 +82,19 @@ const VotersModal = ({
     [isLoading, hasMore]
   );
 
+  const onAvatarClick = (userId: string) => {
+    setSearchParams(
+      (prev) => {
+        prev.set("filterType", PollFilter.USER);
+        prev.set("search", "");
+        prev.set("userId", userId);
+        return prev;
+      },
+      { replace: true }
+    );
+    setIsOpen(false);
+  };
+
   return (
     <Box
       sx={{
@@ -112,7 +128,10 @@ const VotersModal = ({
                 <div ref={lastBookElementRef} key={user.email}>
                   <ListItem>
                     <ListItemAvatar>
-                      <CustomAvatar src={user.picture} />
+                      <CustomAvatar
+                        src={user.picture}
+                        onClick={() => onAvatarClick(user.email)}
+                      />
                     </ListItemAvatar>
                     <ListItemText
                       primary={user.username}
@@ -123,7 +142,10 @@ const VotersModal = ({
               ) : (
                 <ListItem key={user.email}>
                   <ListItemAvatar>
-                    <CustomAvatar src={user.picture} />
+                    <CustomAvatar
+                      src={user.picture}
+                      onClick={() => onAvatarClick(user.email)}
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     primary={user.username}

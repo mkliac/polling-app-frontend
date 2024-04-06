@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from ".";
+import { User } from "../../models/UserModel";
 import {
     followUser,
     getFollowers,
@@ -10,6 +11,7 @@ import {
 import { APIStatus, APIStatusType } from "../../types/ApiStatusType";
 
 type UserState = {
+  currentUserInfo: User;
   getUserInfoStatus: APIStatusType;
   getFollowersStatus: APIStatusType;
   getFollowingStatus: APIStatusType;
@@ -18,6 +20,7 @@ type UserState = {
 };
 
 const initialState: UserState = {
+  currentUserInfo: null,
   getUserInfoStatus: APIStatus.IDLE,
   getFollowersStatus: APIStatus.IDLE,
   getFollowingStatus: APIStatus.IDLE,
@@ -29,6 +32,30 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    setCurrentUserFollowerCount(state, action) {
+      state.currentUserInfo.followerCount = action.payload;
+    },
+    increaseCurrentUserFollowerCount(state) {
+      state.currentUserInfo.followerCount++;
+    },
+    decreaseCurrentUserFollowerCount(state) {
+      state.currentUserInfo.followerCount--;
+    },
+    setCurrentUserFollowingCount(state, action) {
+      state.currentUserInfo.followingCount = action.payload;
+    },
+    increaseCurrentUserFollowingCount(state) {
+      state.currentUserInfo.followingCount++;
+    },
+    decreaseCurrentUserFollowingCount(state) {
+      state.currentUserInfo.followingCount--;
+    },
+    setCurrentUserPollCount(state, action) {
+      state.currentUserInfo.pollCount = action.payload;
+    },
+    toggleFollowing(state) {
+      state.currentUserInfo.following = !state.currentUserInfo.following;
+    },
     resetGetUserInfoStatus: (state) => {
       state.getUserInfoStatus = APIStatus.IDLE;
     },
@@ -51,8 +78,9 @@ export const userSlice = createSlice({
       state.getUserInfoStatus = APIStatus.LOADING;
     });
 
-    builder.addCase(getUserInfo.fulfilled, (state) => {
+    builder.addCase(getUserInfo.fulfilled, (state, { payload }) => {
       state.getUserInfoStatus = APIStatus.SUCCESS;
+      state.currentUserInfo = { ...payload };
     });
 
     builder.addCase(getUserInfo.rejected, (state) => {
@@ -110,12 +138,22 @@ export const userSlice = createSlice({
 });
 
 export const {
+  setCurrentUserFollowerCount,
+  increaseCurrentUserFollowerCount,
+  decreaseCurrentUserFollowerCount,
+  setCurrentUserFollowingCount,
+  increaseCurrentUserFollowingCount,
+  decreaseCurrentUserFollowingCount,
+  setCurrentUserPollCount,
+  toggleFollowing,
   resetGetUserInfoStatus,
   resetGetFollowersStatus,
   resetGetFollowingStatus,
   resetPostFollowStatus,
   resetPostUnfollowStatus,
 } = userSlice.actions;
+export const selectCurrentUserInfo = (state: RootState) =>
+  state.user.currentUserInfo;
 export const selectGetUserInfoStatus = (state: RootState) =>
   state.user.getUserInfoStatus;
 export const selectGetFollowersStatus = (state: RootState) =>

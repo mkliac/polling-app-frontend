@@ -8,3 +8,9 @@ export interface User {
   followingCount?: number;
   following?: boolean;
 }
+
+export interface GetUsersRequest {
+  userId: string;
+  pageNumber?: number;
+  pageSize?: number;
+}

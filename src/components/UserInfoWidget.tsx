@@ -8,44 +8,43 @@ import {
     IconButton,
     Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { User } from "../models/UserModel";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { selectUser } from "../redux/reducers/AuthSlice";
-import { selectGetUserInfoStatus } from "../redux/reducers/UserSlice";
+import {
+    setFollowDrawer,
+    setIsShownFollower,
+} from "../redux/reducers/ConfigSlice";
+import {
+    selectCurrentUserInfo,
+    selectGetUserInfoStatus,
+    setCurrentUserFollowerCount,
+    toggleFollowing
+} from "../redux/reducers/UserSlice";
 import { followUser, getUserInfo, unFollowUser } from "../services/UserService";
 import { APIStatus } from "../types/ApiStatusType";
 import FlexBetween from "./FlexBwtween";
 import LoadingContent from "./LoadingContent";
-
 const UserInfoWidget = ({ userId }) => {
-  const [user, setUser] = useState<User>(undefined);
+  const user = useAppSelector(selectCurrentUserInfo);
   const dispatch = useAppDispatch();
   const status = useAppSelector(selectGetUserInfoStatus);
   const systemUserId = useAppSelector(selectUser).email;
 
   useEffect(() => {
     if (userId === "" || userId === null) return;
-    dispatch(getUserInfo(userId))
-      .unwrap()
-      .then((res) => {
-        setUser(res);
-      });
+    dispatch(getUserInfo(userId));
   }, [userId]);
 
   const onFollow = () => {
     if (user.following) {
       dispatch(unFollowUser(userId));
+      dispatch(setCurrentUserFollowerCount(user.followerCount - 1));
     } else {
       dispatch(followUser(userId));
+      dispatch(setCurrentUserFollowerCount(user.followerCount + 1));
     }
-    setUser((prev) => ({
-      ...prev,
-      following: !prev.following,
-      followerCount: prev.following
-        ? prev.followerCount - 1
-        : prev.followerCount + 1,
-    }));
+    dispatch(toggleFollowing());
   };
 
   return (
@@ -118,6 +117,11 @@ const UserInfoWidget = ({ userId }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    dispatch(setFollowDrawer(true));
+                    dispatch(setIsShownFollower(true));
                   }}
                 >
                   <Typography variant="h5">Followers</Typography>
@@ -129,6 +133,11 @@ const UserInfoWidget = ({ userId }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.5rem",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    dispatch(setFollowDrawer(true));
+                    dispatch(setIsShownFollower(false));
                   }}
                 >
                   <Typography variant="h5">Following</Typography>

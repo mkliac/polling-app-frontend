@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { User } from "../models/UserModel";
+import { GetUsersRequest, User } from "../models/UserModel";
 import { RequestError } from "../types/ApiStatusType";
 import { getApi, postApi } from "../utils/api";
 
@@ -31,12 +31,15 @@ export const getUserInfo = createAsyncThunk<
 
 export const getFollowers = createAsyncThunk<
   User[],
-  string,
+  GetUsersRequest,
   { rejectValue: RequestError }
->("users/getFollowers", async (userId: string, thunkAPI) => {
+>("users/getFollowers", async (request: GetUsersRequest, thunkAPI) => {
   let data: User[] = [];
   try {
-    const followers = await getApi(USER_URI + `/${userId}/followers`);
+    const followers = await getApi(
+      USER_URI + `/${request.userId}/followers`,
+      request
+    );
     data = followers.map((follower: User) => {
       return {
         ...follower,
@@ -51,12 +54,15 @@ export const getFollowers = createAsyncThunk<
 
 export const getFollowing = createAsyncThunk<
   User[],
-  string,
+  GetUsersRequest,
   { rejectValue: RequestError }
->("users/getFollowing", async (userId: string, thunkAPI) => {
+>("users/getFollowing", async (request: GetUsersRequest, thunkAPI) => {
   let data: User[] = [];
   try {
-    const following = await getApi(USER_URI + `/${userId}/following`);
+    const following = await getApi(
+      USER_URI + `/${request.userId}/following`,
+      request
+    );
     data = following.map((follow: User) => {
       return {
         ...follow,
