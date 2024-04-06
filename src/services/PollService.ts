@@ -4,6 +4,7 @@ import {
   GetPollsRequest,
   GetVotersRequest,
   Poll,
+  PollFilter,
   SavePollRequest,
   UpdatePollRequest,
 } from "../models/PollModels";
@@ -39,7 +40,11 @@ export const getPolls = createAsyncThunk<
 >("polls/getPolls", async (request: GetPollsRequest, thunkAPI) => {
   let data: Poll[] = [];
   try {
-    const uri = POLL_URI + (request.userId ? `/users/${request.userId}` : "");
+    const uri =
+      POLL_URI +
+      (request.filterType === PollFilter.USER
+        ? `/users/${request.userId}`
+        : "");
     const polls = await getApi(uri, request);
     data = polls.map((poll: Poll) => {
       return {

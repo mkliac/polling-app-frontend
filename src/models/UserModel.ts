@@ -3,4 +3,8 @@ export interface User {
   picture: string;
   email: string;
   createdAt: Date;
+  pollCount?: number;
+  followerCount?: number;
+  followingCount?: number;
+  following?: boolean;
 }

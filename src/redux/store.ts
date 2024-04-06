@@ -12,6 +12,7 @@ import {
 import storageSession from "redux-persist/lib/storage/session";
 import { rootReducer } from "./reducers";
 import { pollDataSlice } from "./reducers/PollSlice";
+import { userSlice } from "./reducers/UserSlice";
 
 export const persistConfig = {
   key: "root",
@@ -19,7 +20,7 @@ export const persistConfig = {
   version: 1,
 };
 const persistedReducer = persistReducer(
-  { ...persistConfig, blacklist: [pollDataSlice.name] },
+  { ...persistConfig, blacklist: [pollDataSlice.name, userSlice.name] },
   rootReducer
 );
 export const store = configureStore({
