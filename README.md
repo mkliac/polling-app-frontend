@@ -1,5 +1,5 @@
 ## Live
-[Link](https://polling-app-frontend-mu.vercel.app)
+[Polling App Link](https://polling-app-frontend-mu.vercel.app)
 
 ## Backend Repository
-[Link](https://github.com/mkliac/polling-app-backend)
+[polling-app-backend](https://github.com/mkliac/polling-app-backend)
