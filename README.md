@@ -3,3 +3,8 @@
 
 ## Backend Repository
 [polling-app-backend](https://github.com/mkliac/polling-app-backend)
+
+## Local Environment
+```
+npm run start:local
+```
