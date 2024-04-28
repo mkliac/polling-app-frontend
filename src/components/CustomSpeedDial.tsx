@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 
 export interface CustomSpeedDialActionModel {
   icon: ReactNode;
-  name: string;
+  label: string;
   onClick: () => void;
 }
 
@@ -43,9 +43,9 @@ const CustomSpeedDial = ({
     >
       {actions.map((action) => (
         <SpeedDialAction
-          key={action.name}
+          key={action.label}
           icon={action.icon}
-          tooltipTitle={action.name}
+          tooltipTitle={action.label}
           onClick={action.onClick}
         />
       ))}

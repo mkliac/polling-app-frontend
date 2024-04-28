@@ -1,10 +1,18 @@
-import { AddBox, Home, Logout } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import {
+  AddBox,
+  Home,
+  Logout
+} from "@mui/icons-material";
+import {
+  Box,
+  useMediaQuery
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import CustomSpeedDial, {
-  CustomSpeedDialActionModel,
-} from "../components/CustomSpeedDial";
+import CustomButtomNavigation, {
+  CustomButtomNavigationActionModel,
+} from "../components/CustomButtomNavigation";
+import CustomSpeedDial from "../components/CustomSpeedDial";
 import PollWidget from "../components/PollWidget";
 import { Poll } from "../models/PollModels";
 import { useAppDispatch } from "../redux/hook";
@@ -16,6 +24,7 @@ const PollForm = () => {
   const dispatch = useAppDispatch();
   const [poll, setPoll] = useState<Poll>(undefined);
   const navigate = useNavigate();
+  const matches = useMediaQuery("(min-width:650px)");
 
   useEffect(() => {
     dispatch(getPoll(id))
@@ -28,24 +37,24 @@ const PollForm = () => {
       });
   }, []);
 
-  const actions: CustomSpeedDialActionModel[] = [
+  const actions: CustomButtomNavigationActionModel[] = [
     {
       icon: <Logout />,
-      name: "Logout",
+      label: "Logout",
       onClick: () => {
         dispatch(setLogout());
       },
     },
     {
       icon: <AddBox />,
-      name: "Create Poll",
+      label: "Create Poll",
       onClick: () => {
         navigate("/create-poll");
       },
     },
     {
       icon: <Home />,
-      name: "Home",
+      label: "Home",
       onClick: () => {
         navigate("/home");
       },
@@ -64,7 +73,12 @@ const PollForm = () => {
       <Box sx={{ width: "32rem" }}>
         {poll && <PollWidget initPoll={poll} removePoll={(id) => {}} />}
       </Box>
-      <CustomSpeedDial actions={actions} />
+
+      {matches ? (
+        <CustomSpeedDial actions={actions} />
+      ) : (
+        <CustomButtomNavigation actions={actions} />
+      )}
     </Box>
   );
 };

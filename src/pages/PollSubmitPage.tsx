@@ -24,6 +24,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CustomButtomNavigation from "../components/CustomButtomNavigation";
 import CustomSnackbar from "../components/CustomSnackbar";
 import CustomTextField from "../components/CustomTextField";
 import FlexBetween from "../components/FlexBwtween";
@@ -62,7 +63,7 @@ const PollSubmitForm = () => {
   const [id, setId] = useState("");
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const matches = useMediaQuery("(min-width:650px)");
+  const matches = useMediaQuery("(min-width:750px)");
   const pollConfig = useAppSelector(selectAppConfig).pollConfig;
   const navigate = useNavigate();
 
@@ -133,8 +134,10 @@ const PollSubmitForm = () => {
       width="100%"
       height="100vh"
       display="flex"
+      paddingTop={2}
       flexDirection="column"
-      justifyContent="space-around"
+      justifyContent="upper"
+      gap={4}
       alignItems="center"
       sx={{
         backgroundColor: theme.palette.background.default,
@@ -168,7 +171,7 @@ const PollSubmitForm = () => {
           <CardContent
             sx={{
               width: "100%",
-              height: "70vh",
+              height: "65vh",
               overflow: "auto",
               scrollbarGutter: "stable",
             }}
@@ -385,24 +388,36 @@ const PollSubmitForm = () => {
             <PollShareModal id={id} />
           </Box>
         </Modal>
-        <Fab
-          sx={{
-            position: "absolute",
-            bottom: "3rem",
-            right: matches ? "3rem" : "50%",
-            transform: matches ? "none" : "translateX(50%)",
-            bgcolor: theme.palette.background.paper,
-            color: theme.palette.primary.main,
-            "&:hover": {
-              bgcolor: theme.palette.grey[300],
-            },
-          }}
-          onClick={() => {
-            navigate("/home");
-          }}
-        >
-          <Home />
-        </Fab>
+        {matches ? (
+          <Fab
+            sx={{
+              position: "absolute",
+              bottom: "3rem",
+              right: matches ? "3rem" : "50%",
+              transform: matches ? "none" : "translateX(50%)",
+              bgcolor: theme.palette.background.paper,
+              color: theme.palette.primary.main,
+              "&:hover": {
+                bgcolor: theme.palette.grey[300],
+              },
+            }}
+            onClick={() => {
+              navigate("/home");
+            }}
+          >
+            <Home />
+          </Fab>
+        ) : (
+          <CustomButtomNavigation
+            actions={[
+              {
+                label: "Home",
+                icon: <Home />,
+                onClick: () => navigate("/home"),
+              },
+            ]}
+          />
+        )}
       </Box>
     </Box>
   );
